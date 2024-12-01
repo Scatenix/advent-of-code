@@ -1,0 +1,6 @@
+For this challenge I have 2 solutions.
+
+The first solution is the shell script, which is a bit more of a UNIX way of doing this.
+
+The second solution is the awk script, which is a pure awk solution, that I reattempted after
+learning what is possible through the day 1 part 2 challenge.
