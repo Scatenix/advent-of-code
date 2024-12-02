@@ -41,7 +41,7 @@ func main() {
 		}
 	}
 
-	fmt.Printf("Taking the problem dampener into account, the count of the safe reports is: %d\n", safeReports)
+	fmt.Printf("Taking the problem dampener into account, the count of the safe reports now is: %d\n", safeReports)
 }
 
 func checkReport(v []int) bool {
