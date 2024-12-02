@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-const DayPart = "Day 1 - Part 1"
+const DayPart = "Day 2 - Part 1"
 
 func check(e error) {
 	if e != nil {
@@ -37,7 +37,6 @@ func main() {
 
 				diff := abs(v[i] - v[i+1])
 				if diff < 1 || diff > 3 {
-				//if diff > 3 {
 					break
 				}
 			} else {
