@@ -11,6 +11,8 @@ import (
 )
 
 const DayPart = "Day 2 - Part 2"
+const SolutionFormat = "Taking the problem dampener into account, the count of the safe reports now is: %d\n"
+
 
 func main() {
 	puzzleFile := aocutil.AocSetup(DayPart)
@@ -46,7 +48,7 @@ func main() {
 		}
 	}
 
-	fmt.Printf("Taking the problem dampener into account, the count of the safe reports now is: %d\n", safeReports)
+	fmt.Printf(SolutionFormat, safeReports)
 }
 
 func checkReport(v []int) bool {
