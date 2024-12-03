@@ -3,7 +3,8 @@ set -eu # Abort script on error, avoid using unset variables
 
 # Colors: 1=red, 2=green, 3=yellow, 4=blue, 5=pruple, 6=cyan, 7=gray, 8=dark_gray, 9-16=light-versions-of-colors
 warn=$(tput setaf 3)
-success=$(tput setaf 2)info=$(tput sgr0)
+success=$(tput setaf 2)
+info=$(tput sgr0)
 
 print() {
   printf '%b\n' "$1"
@@ -100,6 +101,8 @@ createDirStructure() {
   print "${success}Created directory structure for $year $day $part.${info}"
   executeRecipe "$AOC_HOME/$year/Day-$day/Part-$part/$tech"
   print "${success}Executed recipe for $tech.${info}"
+  touch "$AOC_HOME"/"$year"/Day-"$day"/resources/puzzle-input
+  touch "$AOC_HOME"/"$year"/Day-"$day"/Part-"$part"/puzzle-text
 }
 
 createDirStructures() {
