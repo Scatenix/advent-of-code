@@ -3,9 +3,7 @@ set -eu # Abort script on error, avoid using unset variables
 
 # Colors: 1=red, 2=green, 3=yellow, 4=blue, 5=pruple, 6=cyan, 7=gray, 8=dark_gray, 9-16=light-versions-of-colors
 warn=$(tput setaf 3)
-error=$(tput setaf 1)
-success=$(tput setaf 2)
-info=$(tput sgr0)
+success=$(tput setaf 2)info=$(tput sgr0)
 
 print() {
   printf '%b\n' "$1"
@@ -40,7 +38,7 @@ help() {
 	print "\nAOC_HOME is $AOC_HOME"
 }
 
-currentYear=$(date +%Y)
+currentYear=$(date +%-Y)
 reInt='^[0-9]+$' # check for value being an integer
 
 ARGS_COUNT=4
@@ -51,8 +49,8 @@ if [ $# -eq 1 ]; then
 elif [ $# -eq "$ALT_ARGS_COUNT" ]; then
   if [ $2 = "today" ]; then
     tech=$1
-    year=$currentYear
-    day=$(date +%d)
+    year="$currentYear"
+    day=$(date +%-d)
     part=12
   else
     usage
@@ -64,22 +62,25 @@ elif [ $# -gt "$ARGS_COUNT" ] || [ $# -lt "$ARGS_COUNT" ]; then
 else
   # User input arguments
   tech=$1
-  year=$2
-  day=$3
-  part=$4
+  year=$(sed 's/^0*//' <<< "$2")
+  day=$(sed 's/^0*//' <<< "$3")
+  part=$(sed 's/^0*//' <<< "$4")
 fi
 
-validateInputs() {
-#  if ! [[ $part =~ $reInt ]] ; then
-#     echo "error: Not a number" >&2; exit 1
-#  fi
-
+validateEnvironment() {
   if [ -z "$AOC_HOME" ]; then
     print "AOC_HOME not set. Please set AOC_HOME to the root directory of your advent-of-code project."
     print "Inside AoC dir do 'export AOC_HOME=$(pwd)'"
     print "Or put 'export AOC_HOME='<full path to AoC>'' into your shell rc file"
     exit 1
   fi
+  if ! [ -e "$AOC_HOME"/templates/recipes/"$tech".sh ]; then
+    print "$AOC_HOME/templates/recipes/$tech.sh does not exist, stopping..."
+    exit 1
+  fi
+}
+
+validateInputs() {
   if ! [[ "$year" =~ $reInt ]] || [ "$year" -lt 2015 ] || [ "$year" -gt "$currentYear" ]; then
       print "Provided year is in bad format (2015 - $currentYear)"
       exit 1
@@ -95,27 +96,27 @@ validateInputs() {
 }
 
 createDirStructure() {
-  # if $part is 12, we know we are in the today mode
-  if [ $part = 12 ]; then
-    # Create Part 1
-    dirAlreadyExists_proceed "$AOC_HOME"/"$year"/Day-"$day"/Part-1
-    print "${success}Created directory structure for $year $day 1.${info}"
-    mkdir -p "$AOC_HOME"/"$year"/Day-"$day"/{Part-1,resources}
-    executeRecipe "$AOC_HOME/$year/Day-$day/Part-1/"
-    print "${success}Executed recipe for $tech.${info}"
+  mkdir -p "$AOC_HOME"/"$year"/Day-"$day"/{Part-"$part"/"$tech",resources}
+  print "${success}Created directory structure for $year $day $part.${info}"
+  executeRecipe "$AOC_HOME/$year/Day-$day/Part-$part/$tech"
+  print "${success}Executed recipe for $tech.${info}"
+}
 
-    # Create Part 2
-    dirAlreadyExists_proceed $AOC_HOME/$year/Day-$day/Part-2
-    print "${success}Created directory structure for $year $day 2.${info}"
-    mkdir -p $AOC_HOME/$year/Day-$day/{Part-2,resources}
-    executeRecipe "$AOC_HOME/$year/Day-$day/Part-2/"
-    print "${success}Executed recipe for $tech.${info}"
+createDirStructures() {
+  # if $part is 12, we know we are in the today mode
+  if [ "$part" = 12 ]; then
+    part=1
+    dirAlreadyExists_skip "$AOC_HOME"/"$year"/Day-"$day"/Part-"$part"/"$tech"
+    if [ ! "$skip" = true ]; then
+      createDirStructure
+    fi
+
+    part=2
+    dirAlreadyExists_proceed "$AOC_HOME"/"$year"/Day-"$day"/Part-"$part"/"$tech"
+    createDirStructure
   else
-    dirAlreadyExists_proceed $AOC_HOME/$year/Day-$day/Part-$part
-    mkdir -p $AOC_HOME/$year/Day-$day/{Part-$part,resources}
-    print "${success}Created directory structure for $year $day $part.${info}"
-    executeRecipe "$AOC_HOME/$year/Day-$day/Part-$part/"
-    print "${success}Executed recipe for $tech.${info}"
+    dirAlreadyExists_proceed "$AOC_HOME"/"$year"/Day-"$day"/Part-"$part"/"$tech"
+    createDirStructure
   fi
 }
 
@@ -124,16 +125,29 @@ executeRecipe() {
 }
 
 dirAlreadyExists_proceed(){
-  if [ -d "$AOC_HOME/$year/Day-$day/Part-$part" ]; then
+  if [ -d "$1" ]; then
     read -p "${warn}WARNING: Directory $1 already exists. Proceed with executing recipe?(y) ${info}" -n 1 -r
-    print "\nIn case automation is needed here, append '<<< y' after the command."
     if [[ ! $REPLY =~ ^([Yy])$ ]]
     then
-        print "Stopping creation process..."
-        exit 1
+      print "\nStopping creation process..."
+      exit 1
     fi
   fi
 }
 
+dirAlreadyExists_skip(){
+  if [ -d "$1" ]; then
+    read -p "${warn}WARNING: Directory $1 already exists. Proceed with executing recipe?(y) ${info}" -n 1 -r
+    if [[ ! $REPLY =~ ^([Yy])$ ]]
+    then
+      print "\nSkipping Part-1"
+      skip=true
+    else
+      skip=false
+    fi
+  fi
+}
+
+validateEnvironment
 validateInputs $2
-createDirStructure
+createDirStructures
