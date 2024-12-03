@@ -109,6 +109,7 @@ createDirStructures() {
   # if $part is 12, we know we are in the today mode
   if [ "$part" = 12 ]; then
     part=1
+    skip=false
     dirAlreadyExists_skip "$AOC_HOME"/"$year"/Day-"$day"/Part-"$part"/"$tech"
     if [ ! "$skip" = true ]; then
       createDirStructure
