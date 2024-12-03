@@ -1,90 +1,50 @@
 package main
 
 import (
-	"bufio"
-	"errors"
+	aocio "advent-of-code/aocutil/go/aoc/io"
+	aocmath "advent-of-code/aocutil/go/aoc/math"
+	aocutil "advent-of-code/aocutil/go/aoc/util"
 	"fmt"
-	"os"
 	"sort"
 	"strconv"
 	"strings"
 )
 
+const DayPart = "Day 1 - Part 1"
+const SolutionFormat = "The sum of the distances is: %d\n"
+
 const Left = 0
 const Right = 1
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
+type distance struct {
+	leftDistances []int
+	rightDistances []int
 }
 
 func main() {
-	fileDistancesPath := getDistancesFilePathFromArgs()
-	fileExists(fileDistancesPath)
-	file, err := os.Open(fileDistancesPath)
-	check(err)
+	puzzleFile := aocutil.AocSetup(DayPart)
 
-	leftDistances, rightDistances, err := ReadDistances(file)
-	check(err)
-
-	sort.Ints(leftDistances)
-	sort.Ints(rightDistances)
-
-	sumDistance := 0;
-	for i := range leftDistances {
-		sumDistance += abs(rightDistances[i] - leftDistances[i])
-	}
-
-	fmt.Printf("The sum of the distances is: %d\n", sumDistance)
-}
-
-func ReadDistances(file *os.File) ([]int, []int, error) {
-	var leftDistances []int
-	var rightDistances []int
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-
+	puzzleLineHandler := func(line string, ret distance) distance {
 		distances := strings.Fields(line)
 		leftDistance, err := strconv.Atoi(distances[Left])
-		check(err)
+		aocutil.Check(err)
 		rightDistance, err := strconv.Atoi(distances[Right])
-		check(err)
-
-		leftDistances = append(leftDistances, leftDistance)
-		rightDistances = append(rightDistances, rightDistance)
-	}
-	err := file.Close()
-	check(err)
-
-	return leftDistances, rightDistances, scanner.Err()
-}
-
-func fileExists(file_distances string) {
-	if _, err := os.Stat(file_distances); errors.Is(err, os.ErrNotExist) {
-		fmt.Printf("File: %s does not exist\n", file_distances)
-	}
-}
-
-func getDistancesFilePathFromArgs() string {
-	// Get cli-args
-	args := os.Args
-
-	if len(args) < 2 || len(args) > 2 {
-		fmt.Println("Please provide a path to the Chief Historian's location IDs")
-		os.Exit(1)
+		aocutil.Check(err)
+		ret.leftDistances = append(ret.leftDistances, leftDistance)
+		ret.rightDistances = append(ret.rightDistances, rightDistance)
+		return ret
 	}
 
-	fileDistancesPath := args[1]
-	return fileDistancesPath
-}
+	distances, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
+	aocutil.Check(err)
 
-func abs(i int) int {
-	if i < 0 {
-		return -i
-	} else {
-		return i
+	sort.Ints(distances.leftDistances)
+	sort.Ints(distances.rightDistances)
+
+	sumDistance := 0;
+	for i := range distances.leftDistances {
+		sumDistance += aocmath.Abs(distances.rightDistances[i] - distances.leftDistances[i])
 	}
+
+	fmt.Printf(SolutionFormat, sumDistance)
 }

@@ -1,30 +1,35 @@
 package main
 
 import (
-	"bufio"
-	"errors"
+	aocio "advent-of-code/aocutil/go/aoc/io"
+	aocmath "advent-of-code/aocutil/go/aoc/math"
+	aocutil "advent-of-code/aocutil/go/aoc/util"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 )
 
 const DayPart = "Day 2 - Part 1"
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
+const SolutionFormat = "The count of the safe reports is: %d"
 
 func main() {
-	puzzleFilePath := getPuzzleFilePathFromArgs()
-	fileExists(puzzleFilePath)
-	file, err := os.Open(puzzleFilePath)
-	check(err)
+	puzzleFile := aocutil.AocSetup(DayPart)
 
-	reports, err := ReadReports(file)
-	check(err)
+	puzzleLineHandler := func(line string, ret [][]int) [][]int {
+		ret = append(ret, []int{})
+
+		s_report := strings.Fields(line)
+		for _, v := range s_report {
+			level, err := strconv.Atoi(v)
+			aocutil.Check(err)
+			ret[len(ret)-1] = append(ret[len(ret)-1], level)
+		}
+
+		return ret
+	}
+
+	reports, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
+	aocutil.Check(err)
 
 	safeReports := 0;
 	for _, v := range reports {
@@ -35,7 +40,7 @@ func main() {
 					break
 				}
 
-				diff := abs(v[i] - v[i+1])
+				diff := aocmath.Abs(v[i] - v[i+1])
 				if diff < 1 || diff > 3 {
 					break
 				}
@@ -45,53 +50,5 @@ func main() {
 		}
 	}
 
-	fmt.Printf("The count of the safe reports is: %d\n", safeReports)
-}
-
-func ReadReports(file *os.File) ([][]int, error) {
-	var reports [][]int
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lineText := scanner.Text()
-		reports = append(reports, []int{})
-
-		s_report := strings.Fields(lineText)
-		for _, v := range s_report {
-			level, err := strconv.Atoi(v)
-			check(err)
-			reports[len(reports)-1] = append(reports[len(reports)-1], level)
-		}
-	}
-	err := file.Close()
-	check(err)
-
-	return reports, scanner.Err()
-}
-
-func fileExists(file string) {
-	if _, err := os.Stat(file); errors.Is(err, os.ErrNotExist) {
-		fmt.Printf("File: %s does not exist\n", file)
-	}
-}
-
-func getPuzzleFilePathFromArgs() string {
-	// Get cli-args
-	args := os.Args
-
-	if len(args) < 2 || len(args) > 2 {
-		fmt.Println("Please provide a path to the puzzle file of " + DayPart)
-		os.Exit(1)
-	}
-
-	puzzleFilePath := args[1]
-	return puzzleFilePath
-}
-
-func abs(i int) int {
-	if i < 0 {
-		return -i
-	} else {
-		return i
-	}
+	fmt.Printf(SolutionFormat, safeReports)
 }
