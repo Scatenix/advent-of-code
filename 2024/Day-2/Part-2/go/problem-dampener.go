@@ -13,7 +13,7 @@ import (
 const DayPart = "Day 2 - Part 2"
 const SolutionFormat = "Taking the problem dampener into account, the count of the safe reports now is: %d\n"
 
-
+// Usage: go-app <PATH_TO_PUZZLE_FILE>
 func main() {
 	puzzleFile := aocutil.AocSetup(DayPart)
 

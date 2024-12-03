@@ -10,6 +10,7 @@ import (
 const DayPart = "Day <<<DAY>>> - Part <<<PART>>>"
 const SolutionFormat = "The solution is: %d\n"
 
+// Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
 	puzzleFile := aocutil.AocSetup(DayPart)
 

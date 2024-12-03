@@ -11,6 +11,7 @@ import (
 const DayPart = "Day 3 - Part 1"
 const SolutionFormat = "The sum of all multiplications is: %d\n"
 
+// Usage: go-app <PATH_TO_PUZZLE_FILE>
 func main() {
 	puzzleFile := aocutil.AocSetup(DayPart)
 

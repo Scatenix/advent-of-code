@@ -19,6 +19,7 @@ type distance struct {
 	rightDistances []int
 }
 
+// Usage: go-app <PATH_TO_PUZZLE_FILE>
 func main() {
 	puzzleFile := aocutil.AocSetup(DayPart)
 
