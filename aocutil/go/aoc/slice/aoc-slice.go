@@ -1,5 +1,19 @@
 package slice
 
+import "strconv"
+
+func Atoi(input []string) []int {
+	ints := make([]int, len(input));
+	for _, s := range input {
+		i, err := strconv.Atoi(s)
+		if err != nil {
+			panic(err)
+		}
+		ints = append(ints, i)
+	}
+	return ints
+}
+
 // =============================================================================================================
 // A little deep dive into properly removing an item at index from a slice (vector)
 // =============================================================================================================

@@ -14,16 +14,16 @@ const SolutionFormat = "The cross-count of MASes is: %d\n"
 func main() {
 	puzzleFile := aocutil.AocSetup(DayPart)
 
-	puzzleLineHandler := func(line string, ret [][]string) [][]string {
+	puzzleLineHandler := func(line string, col *[][]string) *[][]string {
+		//col = append(col, []string{})
 		xLine := strings.Split(line, "")
-		ret = append(ret, xLine)
-		return ret
+		*col = append(*col, xLine)
+		return col
 	}
 
-	wordPuzzle, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
+	wordPuzzle := make([][]string, 0)
+	err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler, &wordPuzzle)
 	aocutil.Check(err)
-
-	fmt.Println(wordPuzzle)
 
 	solution := 0;
 	for y := range wordPuzzle {
@@ -55,7 +55,6 @@ func checkBorders(wordPuzzle [][]string, x int, y int) bool {
 	xGreatest := len(wordPuzzle[0]) - 1
 
 	if x-1 < 0 || y-1 < 0 || x+1 > xGreatest || y+1 > yGreatest {
-		print ("out")
 		return false
 	}
 
