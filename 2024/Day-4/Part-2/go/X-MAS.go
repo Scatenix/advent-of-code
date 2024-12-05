@@ -2,9 +2,11 @@ package main
 
 import (
 	aocio "advent-of-code/aocutil/go/aoc/io"
+	aocperf "advent-of-code/aocutil/go/aoc/perf"
 	aocutil "advent-of-code/aocutil/go/aoc/util"
 	"fmt"
 	"strings"
+	"time"
 )
 
 const DayPart = "Day 4 - Part 2"
@@ -12,6 +14,8 @@ const SolutionFormat = "The cross-count of MASes is: %d\n"
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
+	defer aocperf.TimeTracker(time.Now(), "Main")
+	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
 	puzzleFile := aocutil.AocSetup(DayPart)
 
 	puzzleLineHandler := func(line string, col *[][]string) *[][]string {
@@ -25,7 +29,7 @@ func main() {
 	err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler, &wordPuzzle)
 	aocutil.Check(err)
 
-	solution := 0;
+	solution := 0
 	for y := range wordPuzzle {
 		for x := range wordPuzzle[y] {
 			if wordPuzzle[y][x] == "A" {
