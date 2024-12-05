@@ -1,7 +1,7 @@
 package perf
 
 import (
-	"log"
+	"fmt"
 	"runtime"
 	"strconv"
 	"time"
@@ -51,7 +51,7 @@ func PrintMemUsage(memMagnitude uint64, name string) {
 		" | TotalAlloc = %g "+n +
 		" | Sys = %g "+n +
 		" | NumGC = %v\n"
-	log.Printf(
+	fmt.Printf(
 		out,
 		name,
 		float64(m.Alloc) / float64(memMagnitude),
@@ -65,5 +65,5 @@ func PrintMemUsage(memMagnitude uint64, name string) {
 // usage: defer aocperf.TimeTracker(time.Now(), "Main")
 func TimeTracker(start time.Time, name string) {
 	elapsed := time.Since(start)
-	log.Printf("%s took %s", name, elapsed)
+	fmt.Printf("%s took %s\n", name, elapsed)
 }

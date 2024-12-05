@@ -29,15 +29,16 @@ func FileExists(file string) error {
 // File stream will be closed after execution
 //
 // Returns collection[T] and scanner.Err()
-func ReadPuzzleFile[T any](file *os.File, f func(line string, col *T) *T, col *T) error {
+func ReadPuzzleFile[T any](file *os.File, f func(line string, col T) T) (T, error) {
 	scanner := bufio.NewScanner(file)
 
+	var col T
 	for scanner.Scan() {
 		col = f(scanner.Text(), col)
 	}
 
 	defer closeFile(file)
-	return scanner.Err()
+	return col, scanner.Err()
 }
 
 func closeFile(f *os.File) {

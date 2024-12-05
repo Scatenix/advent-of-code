@@ -18,15 +18,13 @@ func main() {
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
 	puzzleFile := aocutil.AocSetup(DayPart)
 
-	puzzleLineHandler := func(line string, col *[][]string) *[][]string {
-		//col = append(col, []string{})
+	puzzleLineHandler := func(line string, col [][]string) [][]string {
 		xLine := strings.Split(line, "")
-		*col = append(*col, xLine)
+		col = append(col, xLine)
 		return col
 	}
 
-	wordPuzzle := make([][]string, 0)
-	err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler, &wordPuzzle)
+	wordPuzzle, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
 	solution := 0
