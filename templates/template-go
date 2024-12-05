@@ -9,13 +9,13 @@ import (
 	"time"
 )
 
-const DayPart = "Day <<<DAY>>> - Part <<<PART>>>"
-const SolutionFormat = "The solution is: %d\n"
+const DayPart = "<<<YEAR>>> Day <<<DAY>>> - Part <<<PART>>>"
+const SolutionFormat = ">>> The solution is: %d\n"
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
     defer aocperf.TimeTracker(time.Now(), "Main")
-    defer aocperf.PrintMemUsage(aocperf.KB)
+    defer aocperf.PrintMemUsage(aocperf.KB, "Main")
 	puzzleFile := aocutil.AocSetup(DayPart)
 
 	puzzleLineHandler := func(line string, ret string) string {

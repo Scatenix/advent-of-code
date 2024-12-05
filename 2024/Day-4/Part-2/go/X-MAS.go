@@ -10,7 +10,7 @@ import (
 )
 
 const DayPart = "Day 4 - Part 2"
-const SolutionFormat = "The cross-count of MASes is: %d\n"
+const SolutionFormat = ">>> The cross-count of MASes is: %d\n"
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {

@@ -58,17 +58,26 @@ func main() {
 }
 
 func iterPages(v []int, puzzleInput manualInstructions) bool {
-	for _, page := range v {
-		pageOrder := puzzleInput.order[page];
-		for _, po := range pageOrder {
-			if slices.Contains(v, po) {
-				before := slices.Index(v, po)
-				after := slices.Index(v, page)
-				if before < after {
-					return false
+	manualWasWrong := false
+	for y := 0; y <= len(v); y++ {
+		for _, page := range v {
+			pageOrder := puzzleInput.order[page];
+			for _, po := range pageOrder {
+				if slices.Contains(v, po) {
+					before := slices.Index(v, po)
+					after := slices.Index(v, page)
+					if before < after {
+						manualWasWrong = true
+						tmp := v[before]
+						v[before] = v[after]
+						v[after] = tmp
+					}
 				}
 			}
 		}
 	}
-	return true
+	if manualWasWrong {
+		return true
+	}
+	return false
 }

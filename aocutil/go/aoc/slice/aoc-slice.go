@@ -4,12 +4,12 @@ import "strconv"
 
 func Atoi(input []string) []int {
 	ints := make([]int, len(input));
-	for _, s := range input {
-		i, err := strconv.Atoi(s)
+	for i, s := range input {
+		n, err := strconv.Atoi(s)
 		if err != nil {
 			panic(err)
 		}
-		ints = append(ints, i)
+		ints[i] = n
 	}
 	return ints
 }
