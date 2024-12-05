@@ -14,6 +14,18 @@ func Atoi(input []string) []int {
 	return ints
 }
 
+func RemoveZeros(s []int) []int {
+	sLen := len(s)
+	for i := 0; i < sLen; i++ {
+		if s[i] == 0 {
+			s = RemoveIndexImpure(s, i)
+			sLen--
+			i--
+		}
+	}
+	return s
+}
+
 // =============================================================================================================
 // A little deep dive into properly removing an item at index from a slice (vector)
 // =============================================================================================================

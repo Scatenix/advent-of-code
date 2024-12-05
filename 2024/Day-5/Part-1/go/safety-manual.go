@@ -49,7 +49,7 @@ func main() {
 
 	middleSum := 0;
 	for _, v := range puzzleInput.manuals {
-		if iterPages(v, puzzleInput) {
+		if checkPageOrder(v, puzzleInput) {
 			middleSum += v[len(v)/2]
 		}
 	}
@@ -57,14 +57,14 @@ func main() {
 	fmt.Printf(SolutionFormat, middleSum)
 }
 
-func iterPages(v []int, puzzleInput manualInstructions) bool {
+func checkPageOrder(v []int, puzzleInput manualInstructions) bool {
 	for _, page := range v {
 		pageOrder := puzzleInput.order[page];
 		for _, po := range pageOrder {
 			if slices.Contains(v, po) {
-				before := slices.Index(v, po)
-				after := slices.Index(v, page)
-				if before < after {
+				shouldBeBefore := slices.Index(v, page)
+				shouldBeAfter := slices.Index(v, po)
+				if shouldBeAfter < shouldBeBefore {
 					return false
 				}
 			}

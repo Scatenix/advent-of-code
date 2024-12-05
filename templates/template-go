@@ -18,9 +18,9 @@ func main() {
     defer aocperf.PrintMemUsage(aocperf.KB, "Main")
 	puzzleFile := aocutil.AocSetup(DayPart)
 
-	puzzleLineHandler := func(line string, ret string) string {
-		ret += line
-		return ret
+	puzzleLineHandler := func(line string, col string) string {
+		col += line
+		return col
 	}
 
 	puzzleInput, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
