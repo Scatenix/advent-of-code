@@ -26,6 +26,33 @@ func RemoveZeros(s []int) []int {
 	return s
 }
 
+func DeepCopy[T any](s []T) []T {
+	dc := make([]T, len(s))
+	copy(dc, s)
+	return dc
+}
+
+func DeepCopy2D[T any](s [][]T) [][]T {
+	new := make([][]T, len(s))
+	for i := range s {
+		new[i] = make([]T, len(s[i]))
+		copy(new[i], s[i])
+	}
+	return new
+}
+
+func DeepCopy3D[T any](original [][][]T) [][][]T {
+	new := make([][][]T, len(original))
+	for i := range original {
+		new[i] = make([][]T, len(original[i]))
+		for j := range original[i] {
+			new[i][j] = make([]T, len(original[i][j]))
+			copy(new[i][j], original[i][j])
+		}
+	}
+	return new
+}
+
 // =============================================================================================================
 // A little deep dive into properly removing an item at index from a slice (vector)
 // =============================================================================================================

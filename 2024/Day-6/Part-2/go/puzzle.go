@@ -2,18 +2,25 @@ package main
 
 import (
 	aocio "advent-of-code/aocutil/go/aoc/io"
+	aocslice "advent-of-code/aocutil/go/aoc/slice"
 	aocutil "advent-of-code/aocutil/go/aoc/util"
-	aocperf "advent-of-code/aocutil/go/aoc/perf"
+	"atomicgo.dev/cursor"
+	//"github.com/gookit/color"
 	"fmt"
-	"strconv"
 	"strings"
-	"time"
 )
 
-const DayPart = "<<<YEAR>>> Day 2024 - Part 2"
+const DayPart = "2024 Day 6 - Part 2"
 const SolutionFormat = ">>> The solution is: %d\n"
 
+const Guard = "^"
+const PassMarker = "X"
 const Wall = "#"
+const Wallo = "O"
+const Walkway = "."
+
+const ColorGreen = "\033[32m"
+const ColorReset = "\033[0m"
 
 type coord struct {
 	x int
@@ -22,8 +29,8 @@ type coord struct {
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
-    defer aocperf.TimeTracker(time.Now(), "Main")
-    defer aocperf.PrintMemUsage(aocperf.KB, "Main")
+    //defer aocperf.TimeTracker(time.Now(), "Main")
+    //defer aocperf.PrintMemUsage(aocperf.KB, "Main")
 	puzzleFile := aocutil.AocSetup(DayPart)
 
 	puzzleLineHandler := func(line string, col [][]string) [][]string {
@@ -31,22 +38,46 @@ func main() {
 		return col
 	}
 
-	puzzleInput, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
+	guardMap, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
-	pos := locateStart(guardMap)
+	infinitumObstacle := 0
 	// We start by walking down, because the map was read backwards
+
+	// first walk to see where we want to put the barriets (we only put them were the guard actually wants to walk
+	pos := locateStart(guardMap)
 	walkVec := coord{x: 0, y:-1}
+	dc := aocslice.DeepCopy2D(guardMap)
+	walk(dc, pos, walkVec, 0)
+	walkedPositions := getWalkedPositions(dc)
 
-	fmt.Println("Before walking:")
-	printMap(guardMap)
+	for y, row := range guardMap {
+		for x := range row {
+			pos := locateStart(guardMap)
+			walkVec = coord{x: 0, y:-1}
+			newMap := aocslice.DeepCopy2D(guardMap)
 
-	walk(guardMap, pos, walkVec)
-	walkedPositions := countWalkedPositions(guardMap)
+			//fmt.Printf("Currently at: %d %d\n", x, y)
 
-	fmt.Println("\nAfter walking:")
-	printMap(guardMap)
-	fmt.Printf(SolutionFormat, walkedPositions)
+			if newMap[y][x] == Wall {
+				continue
+			}
+			newMap[y][x] = Wallo
+
+			printMap(newMap)
+			cursor.Move(pos.x+1, len(guardMap)-pos.y-1)
+			cursor.Hide()
+
+			if !walk(newMap, pos, walkVec, 0) {
+				infinitumObstacle++
+			}
+			fmt.Print("\033[0m")
+			cursor.Move(-130, 0)
+			newMap[y][x] = Walkway
+		}
+	}
+
+	fmt.Printf(SolutionFormat, infinitumObstacle)
 }
 
 // locateStart returnx (x, y)
@@ -62,19 +93,28 @@ func locateStart(guardMap [][]string) coord {
 }
 
 // walk the map and leave an x
-func walk(guardMap [][]string, pos coord, vec coord) {
-	if checkForMapEnd(guardMap, pos) {
-		guardMap[pos.y][pos.x] = PassMarker
-		return
+func walk(guardMap [][]string, pos coord, vec coord, depth int) bool {
+	if depth > 20000 {
+		return false
 	}
 
-	if guardMap[pos.y+vec.y][pos.x+vec.x] == Wall {
+	//time.Sleep(1 * time.Millisecond)
+	//time.Sleep(100 * time.Microsecond)
+	//printMap(guardMap)
+	printPassMarker(vec)
+
+	if checkForMapEnd(guardMap, pos) {
+		guardMap[pos.y][pos.x] = PassMarker
+		return true
+	}
+
+	if guardMap[pos.y+vec.y][pos.x+vec.x] == Wall || guardMap[pos.y+vec.y][pos.x+vec.x] == Wallo {
 		vec = turnLeft(vec)
 	}
 
 	guardMap[pos.y][pos.x] = PassMarker
 	pos = addVec(pos, vec)
-	walk(guardMap, pos, vec)
+	return walk(guardMap, pos, vec, depth+1)
 }
 
 func addVec(pos coord, vec coord) coord {
@@ -109,23 +149,37 @@ func turnLeft(vec coord) coord {
 	return vec
 }
 
-func countWalkedPositions(guardMap [][]string) int {
-	passes := 0
+func getWalkedPositions(guardMap [][]string) []coord {
+	walkedPos := make([]coord, 0)
 	for y := 0; y<len(guardMap); y++ {
 		for x := 0; x<len(guardMap[0]); x++ {
 			if guardMap[y][x] == PassMarker {
-				passes++
+				walkedPos = append(walkedPos, coord{x: x, y: y})
 			}
 		}
 	}
-	return passes
+	return walkedPos
 }
 
 func printMap(guardMap [][]string) {
+	cursor.UpAndClear(129)
 	for y := 0; y<len(guardMap); y++ {
 		for x := 0; x<len(guardMap[0]); x++ {
-			fmt.Printf(guardMap[y][x])
+			if guardMap[y][x] == PassMarker {
+				//fmt.Print("\033[33m", PassMarker)
+				fmt.Print("\033[46m%s\033[0m", PassMarker)
+			} else {
+				fmt.Print(guardMap[y][x])
+				//fmt.Print("\033[0m", guardMap[y][x])
+			}
 		}
-		fmt.Printf("\n")
+		fmt.Print("\n")
 	}
+}
+
+func printPassMarker(vec coord) {
+	cursor.Move(vec.x-1, -vec.y)
+	//fmt.Print("ESC[{line};{column}H", PassMarker)
+	//fmt.Print("\033[%d;%dH\033[46m", 50, 50, PassMarker)
+	fmt.Print("\033[46m", PassMarker)
 }

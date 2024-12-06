@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const DayPart = "<<<YEAR>>> Day 2024 - Part 1"
+const DayPart = "2024 Day 6 - Part 1"
 const SolutionFormat = ">>> The solution is: %d\n"
 
 const Guard = "^"
