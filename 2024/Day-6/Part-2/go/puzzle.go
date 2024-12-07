@@ -5,24 +5,17 @@ import (
 	aocperf "advent-of-code/aocutil/go/aoc/perf"
 	aocslice "advent-of-code/aocutil/go/aoc/slice"
 	aocutil "advent-of-code/aocutil/go/aoc/util"
-	"atomicgo.dev/cursor"
-	"time"
-
-	//"github.com/gookit/color"
 	"fmt"
 	"strings"
+	"time"
 )
 
 const DayPart = "2024 Day 6 - Part 2"
 const SolutionFormat = ">>> The solution is: %d\n"
 
 const Guard = "^"
-const PassMarker = "X"
 const Wall = "#"
-const Wallo = "O"
 const Walkway = "."
-
-var disablePrinting = true
 
 type coord struct {
 	x int
@@ -44,49 +37,24 @@ func main() {
 	aocutil.Check(err)
 
 	infinitumObstacle := 0
-	// We start by walking down, because the map was read backwards
-
-	// first walk to see where we want to put the barriets (we only put them were the guard actually wants to walk
 	pos := locateStart(guardMap)
 	walkVec := coord{x: 0, y:-1}
 	dc := aocslice.DeepCopy2D(guardMap)
-	walk(dc, coord{pos.x, pos.y}, walkVec, 0, 0, coord{0, 0}, false)
-	walkedPositions := getWalkedPositions(dc)
 
-	//disablePrinting = false
-	for _, wp := range walkedPositions {
-			//pos := locateStart(guardMap)
-			walkVec = coord{x: 0, y:-1}
-			//newMap := aocslice.DeepCopy2D(guardMap)
+	visited := map[coord]coord{{pos.x, pos.y}: {walkVec.x, walkVec.y}}
+	_, visited = walk(dc, coord{pos.x, pos.y}, walkVec, visited, 0)
 
-			//fmt.Printf("Currently at: %d %d\n", x, y)
+	for place := range visited {
+		newMap := aocslice.DeepCopy2D(guardMap)
+		newMap[place.y][place.x] = Wall
 
-			//if newMap[wp.y][wp.x] == Wall {
-			//	continue
-			//}
-			//newMap[wp.y][wp.x] = Wallo
-			guardMap[wp.y][wp.x] = Wallo
+		success, _ := walk(newMap, coord{pos.x, pos.y}, walkVec, map[coord]coord{{0, 0}: {0, 0}}, 0)
+		if !success {
+			infinitumObstacle++
+		}
 
-			//if wp.x == 33 && wp.y == 10 {
-			//	//print("Problem")
-			//	disablePrinting = false
-			//}
-			if !disablePrinting {
-				printMap(guardMap, pos)
-				cursor.Move(pos.x+1, len(guardMap)-pos.y-1)
-				cursor.Hide()
-			}
-
-			//if !walk(newMap, pos, walkVec, 0) {
-			if !walk(guardMap, coord{pos.x, pos.y}, walkVec, 0, 0, wp, false) {
-				infinitumObstacle++
-			}
-			fmt.Print("\033[0m")
-			cursor.Move(-130, 0)
-
-			guardMap[wp.y][wp.x] = Walkway
+		newMap[place.y][place.x] = Walkway
 	}
-
 	fmt.Printf(SolutionFormat, infinitumObstacle)
 }
 
@@ -102,61 +70,25 @@ func locateStart(guardMap [][]string) coord {
 	panic("could not locate start")
 }
 
-// walk the map and leave an x
-func walk(guardMap [][]string, pos coord, vec coord, passedWallO int, depth int, o coord, disablePassMarker bool) bool {
-	//fmt.Println(pos, o)
-	//if o.x == 33 && o.y == 10 {
-	//	//print("Problem")
-	//	disablePrinting = false
-	//}
-	if passedWallO > 2 {
-		return false
-	}
+func walk(guardMap [][]string, pos coord, vec coord, visited map[coord]coord, depth int) (bool, map[coord]coord) {
+	nextY, nextX := pos.y+vec.y, pos.x+vec.x
+
 	if depth > 20000 {
-		return false
+		return false, visited
 	}
-
-	if !disablePrinting {
-		time.Sleep(40 * time.Millisecond)
-		//time.Sleep(100 * time.Microsecond)
-		printPassMarker(vec)
-		//printMap(guardMap, pos)
-	}
-
-	//printMap(guardMap, pos)
-
 	if checkForMapEnd(guardMap, pos) {
-		if !disablePassMarker {
-			guardMap[pos.y][pos.x] = PassMarker
-		}
-		return true
+		return true, visited
+	}
+	if guardMap[nextY][nextX] == Wall {
+		vec = turnLeft(vec)
+	} else {
+		pos.y, pos.x = nextY, nextX
+		//visited = append(visited, [][]int{{nextY, nextX}}...)
+		visited[pos] = coord{vec.x, vec.y}
 	}
 
-	if guardMap[pos.y+vec.y][pos.x+vec.x] == Wall || guardMap[pos.y+vec.y][pos.x+vec.x] == Wallo {
-		if guardMap[pos.y+vec.y][pos.x+vec.x] == Wall {
-			vec = turnLeft(vec)
-		} else if guardMap[pos.y+vec.y][pos.x+vec.x] == Wallo {
-			passedWallO++
-			vec = turnLeft(vec)
-			if guardMap[pos.y+vec.y][pos.x+vec.x] == Wall {
-				vec = turnLeft(vec)
-			}
-		}
-	}
-
-
-	if !disablePassMarker {
-		guardMap[pos.y][pos.x] = PassMarker
-	}
-	pos = addVec(pos, vec)
 	depth++
-	return walk(guardMap, pos, vec, passedWallO, depth, o, disablePassMarker)
-}
-
-func addVec(pos coord, vec coord) coord {
-	pos.x += vec.x
-	pos.y += vec.y
-	return pos
+	return walk(guardMap, pos, vec, visited, depth)
 }
 
 func checkForMapEnd(guardMap [][]string, pos coord) bool {
@@ -183,45 +115,4 @@ func turnLeft(vec coord) coord {
 		vec.y = tmpVecX
 	}
 	return vec
-}
-
-func getWalkedPositions(guardMap [][]string) []coord {
-	walkedPos := make([]coord, 0)
-	for y := 0; y<len(guardMap); y++ {
-		for x := 0; x<len(guardMap[0]); x++ {
-			if guardMap[y][x] == PassMarker {
-				walkedPos = append(walkedPos, coord{x: x, y: y})
-			}
-		}
-	}
-	return walkedPos
-}
-
-func printMap(guardMap [][]string, pos coord) {
-	cursor.UpAndClear(129)
-	for y := 0; y<len(guardMap); y++ {
-		for x := 0; x<len(guardMap[0]); x++ {
-			if guardMap[y][x] == PassMarker {
-				//fmt.Print("\033[33m", PassMarker)
-				fmt.Print(Walkway)
-				//fmt.Print("\033[46m%s\033[0m", PassMarker)
-			} else {
-				fmt.Print(guardMap[y][x])
-				//fmt.Print("\033[0m", guardMap[y][x])
-			}
-			if y == pos.y && x == pos.x {
-				fmt.Print("H")
-			}
-		}
-		fmt.Print("\n")
-	}
-	//cursor.Move(pos.x+1, len(guardMap)-pos.y-1)
-	//cursor.Hide()
-}
-
-func printPassMarker(vec coord) {
-	cursor.Move(vec.x-1, -vec.y)
-	//fmt.Print("ESC[{line};{column}H", PassMarker)
-	//fmt.Print("\033[%d;%dH\033[46m", 50, 50, PassMarker)
-	fmt.Print("\033[46m", PassMarker)
 }
