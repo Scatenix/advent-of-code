@@ -5,11 +5,13 @@ import (
 	aocperf "advent-of-code/aocutil/go/aoc/perf"
 	aocslice "advent-of-code/aocutil/go/aoc/slice"
 	aocutil "advent-of-code/aocutil/go/aoc/util"
-	"atomicgo.dev/cursor"
+	"atomicgo.dev/cursor" // Doc: https://github.com/atomicgo/cursor
 	"fmt"
 	"strings"
 	"time"
 )
+
+// TODO: This go file contains some comments, starting with "NOTE:" with suggestions to improve the code for performance gains
 
 // visual only works in a terminal which can fit the whole map at once. Else there are massive bugs with it
 const visual = false
@@ -55,10 +57,10 @@ func main() {
 	visited := map[coord]coord{{pos.x, pos.y}: {walkVec.x, walkVec.y}}
 	_, visited = walk(dc, pos, walkVec, visited)
 
+	// NOTE: This could be a good candidate for multi-threading
 	for place := range visited {
 		guardMap[place.y][place.x] = Obstacle
 
-		cursor.HorizontalAbsolute(0)
 		printMap(guardMap, pos)
 
 		success, _ := walk(guardMap, coord{pos.x, pos.y}, walkVec, map[coord]coord{{0, 0}: {0, 0}})
@@ -84,6 +86,10 @@ func locateStart(guardMap [][]string) coord {
 	panic("could not locate start")
 }
 
+// NOTE: more efficent here would be to calculate jump tables at the start of the program (precalculating on which pos I will end up)
+// It could be something like a map, containing the position+walkVec after turning left because of an obstacle and with the value of the jumping destination
+// Only tricky part would be to not use the jump table at the path where the Obstacle resides (probably not too hard?)
+// With that I could save n-1 calls between each obstacle
 func walk(guardMap [][]string, pos coord, vec coord, visited map[coord]coord) (bool, map[coord]coord) {
 	nextY, nextX := pos.y+vec.y, pos.x+vec.x
 
@@ -110,7 +116,7 @@ func walk(guardMap [][]string, pos coord, vec coord, visited map[coord]coord) (b
 
 // The puzzle tells us to turn right, but because the map was read in backwards,
 // we also need to do everything the other way round.
-// NOTe: while it is certainly I programatic way, something like a switch case is just better for this case
+// NOTE: while it is certainly I programatic way, something like a switch case is just better for this case
 func turnLeft(vec coord) coord {
 	tmpVecX := vec.x
 	if vec.x != 0 {
@@ -131,6 +137,7 @@ func printMap(guardMap [][]string, pos coord) {
 	if visual {
 		VisualRun++
 		if VisualRun >= showFromRun {
+			cursor.HorizontalAbsolute(0)
 			cursor.UpAndClear(128)
 			for y := 0; y<len(guardMap); y++ {
 				for x := 0; x<len(guardMap[0]); x++ {

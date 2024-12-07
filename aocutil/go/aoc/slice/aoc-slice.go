@@ -14,6 +14,18 @@ func Atoi(input []string) []int {
 	return ints
 }
 
+func Atoi64(input []string) []int64 {
+	ints := make([]int64, len(input));
+	for i, s := range input {
+		n, err := strconv.ParseInt(s, 10, 64)
+		if err != nil {
+			panic(err)
+		}
+		ints[i] = n
+	}
+	return ints
+}
+
 func RemoveZeros(s []int) []int {
 	sLen := len(s)
 	for i := 0; i < sLen; i++ {
