@@ -12,15 +12,13 @@ import (
 	"time"
 )
 
-// 920914743203 is too low
-
 const DayPart = "2024 Day 7 - Part 1"
 const SolutionFormat = ">>> The solution is: %d\n"
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
-    defer aocperf.TimeTracker(time.Now(), "Main")
-    defer aocperf.PrintMemUsage(aocperf.KB, "Main")
+	defer aocperf.TimeTracker(time.Now(), "Main")
+	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
 	puzzleFile := aocutil.AocSetup(DayPart)
 
 	puzzleLineHandler := func(line string, totalResult int64) int64 {
@@ -39,14 +37,16 @@ func main() {
 func checkForResult(result int64, operands []int64) int64 {
 	gaps := len(operands) - 1
 
-	for i := 0; i < aocmath.Pow(2, gaps); i++ {
+	for i := 0; i < aocmath.Pow(3, gaps); i++ {
 		check := operands[0]
-		operators := intToBinaryStringWithPadding(i, gaps)
+		operators := aocmath.IntToBaseStringWithPadding(i, gaps, 3)
 		for op, v := range operands[1:] {
 			if operators[op] == '0' {
 				check = check * v
-			} else {
+			} else if operators[op] == '1' {
 				check = check + v
+			} else {
+				check = aocmath.ConcatInt64(check, v)
 			}
 		}
 		if check == result {
@@ -54,13 +54,4 @@ func checkForResult(result int64, operands []int64) int64 {
 		}
 	}
 	return 0
-}
-
-func intToBinaryStringWithPadding(num, length int) string {
-	binaryStr := strconv.FormatInt(int64(num), 2)
-	padding := length - len(binaryStr)
-	if padding > 0 {
-		binaryStr = fmt.Sprintf("%0*s", length, binaryStr)
-	}
-	return binaryStr
 }
