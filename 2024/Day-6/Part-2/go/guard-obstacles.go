@@ -34,56 +34,53 @@ type coord struct {
 	y int
 }
 
+type puzzleInput struct {
+	guardMap [][]string
+	guardStart coord
+	lineNum int
+}
+
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
     defer aocperf.TimeTracker(time.Now(), "Main")
     defer aocperf.PrintMemUsage(aocperf.KB, "Main")
 	puzzleFile := aocutil.AocSetup(DayPart)
 
-	puzzleLineHandler := func(line string, col [][]string) [][]string {
-		col = append(col, strings.Split(line, ""))
-		return col
+	puzzleLineHandler := func(line string, puzzleInput puzzleInput) puzzleInput {
+		puzzleInput.lineNum++
+		puzzleInput.guardMap = append(puzzleInput.guardMap, strings.Split(line, ""))
+		if strings.Contains(line, Guard) {
+			puzzleInput.guardStart = coord{strings.Index(line, Guard), puzzleInput.lineNum}
+		}
+		return puzzleInput
 	}
 
-	guardMap, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
+	puzzleInput, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
 	infinitumObstacle := 0
-	pos := locateStart(guardMap)
+	pos := puzzleInput.guardStart
 	walkVec := coord{x: 0, y:-1}
-	dc := aocslice.DeepCopy2D(guardMap)
+	dc := aocslice.DeepCopy2D(puzzleInput.guardMap)
 
-	printMap(guardMap, pos)
+	printMap(puzzleInput.guardMap, pos)
 	visited := map[coord]coord{{pos.x, pos.y}: {walkVec.x, walkVec.y}}
 	_, visited = walk(dc, pos, walkVec, visited)
 
 	// NOTE: This could be a good candidate for multi-threading
 	for place := range visited {
-		guardMap[place.y][place.x] = Obstacle
+		puzzleInput.guardMap[place.y][place.x] = Obstacle
 
-		printMap(guardMap, pos)
+		printMap(puzzleInput.guardMap, pos)
 
-		success, _ := walk(guardMap, coord{pos.x, pos.y}, walkVec, map[coord]coord{{0, 0}: {0, 0}})
+		success, _ := walk(puzzleInput.guardMap, coord{pos.x, pos.y}, walkVec, map[coord]coord{{0, 0}: {0, 0}})
 		if !success {
 			infinitumObstacle++
 		}
 
-		guardMap[place.y][place.x] = Walkway
+		puzzleInput.guardMap[place.y][place.x] = Walkway
 	}
 	fmt.Printf(SolutionFormat, infinitumObstacle)
-}
-
-// locateStart returnx (x, y)
-// NOTE: could be done when reading the file in
-func locateStart(guardMap [][]string) coord {
-	for y := range guardMap {
-		for x := range guardMap[y] {
-			if guardMap[y][x] == Guard {
-				return coord{x: x, y: y}
-			}
-		}
-	}
-	panic("could not locate start")
 }
 
 // NOTE: more efficent here would be to calculate jump tables at the start of the program (precalculating on which pos I will end up)
