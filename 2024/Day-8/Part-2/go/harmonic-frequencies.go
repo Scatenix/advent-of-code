@@ -19,7 +19,6 @@ func main() {
 	puzzleFile := aocutil.AocSetup(DayPart)
 
 	puzzleLineHandler := func(line string, col [][]rune) [][]rune {
-		//col = append(col, strings.Split(line, ""))
 		col = append(col, []rune(line))
 		return col
 	}
@@ -27,7 +26,7 @@ func main() {
 	antennaMap, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
-	freqMap := getAllFrequencieMap(antennaMap)
+	freqMap := getFreqMap(antennaMap)
 
 	antinodes := calculateAntinodesCount(antennaMap, freqMap)
 	printAntennaMap(antennaMap, antinodes)
@@ -35,22 +34,7 @@ func main() {
 	fmt.Printf(SolutionFormat, len(antinodes))
 }
 
-func printAntennaMap(antennaMap [][]rune, antinodes map[map2D.Coord]bool) {
-	for y := 0; y < len(antennaMap); y++ {
-		for x := 0; x < len(antennaMap[0]); x++ {
-			if antennaMap[y][x] == '.' && antinodes[map2D.Coord{x, y}] {
-				fmt.Printf("\033[32m#")
-			} else if antinodes[map2D.Coord{x, y}] {
-				fmt.Printf("\033[32m%s", string(antennaMap[y][x]))
-			} else {
-				fmt.Printf("\033[0m%s", string(antennaMap[y][x]))
-			}
-		}
-		fmt.Print("\n")
-	}
-}
-
-func getAllFrequencieMap(antennaMap [][]rune) map[rune][]map2D.Coord {
+func getFreqMap(antennaMap [][]rune) map[rune][]map2D.Coord {
 	freqMap := make(map[rune][]map2D.Coord)
 	for y := 0; y < len(antennaMap); y++ {
 		for x := 0; x < len(antennaMap); x++ {
@@ -72,34 +56,34 @@ func calculateAntinodesCount(antennaMap [][]rune, freqMap map[rune][]map2D.Coord
 					antinodes[pos1] = true
 					antinodes[pos2] = true
 
-					antiPos := map2D.SubVector(pos1, vec)
-					if map2D.WithinBounds(antennaMap, antiPos) {
-						antinodes[antiPos] = true
-					}
-
+					antiPos := pos1
 					for map2D.WithinBounds(antennaMap, antiPos) {
+						antinodes[antiPos] = true
 						antiPos = map2D.SubVector(antiPos, vec)
-						if map2D.WithinBounds(antennaMap, antiPos) {
-							antinodes[antiPos] = true
-						}
 					}
-
-					antiPos = map2D.AddVector(pos2, vec)
-					if map2D.WithinBounds(antennaMap, antiPos) {
-						antinodes[antiPos] = true
-					}
-
+					antiPos = pos2
 					for map2D.WithinBounds(antennaMap, antiPos) {
+						antinodes[antiPos] = true
 						antiPos = map2D.AddVector(antiPos, vec)
-						if map2D.WithinBounds(antennaMap, antiPos) {
-							antinodes[antiPos] = true
-						}
 					}
-
-
 				}
 			}
 		}
 	}
 	return antinodes
+}
+
+func printAntennaMap(antennaMap [][]rune, antinodes map[map2D.Coord]bool) {
+	for y := 0; y < len(antennaMap); y++ {
+		for x := 0; x < len(antennaMap[0]); x++ {
+			if antennaMap[y][x] == '.' && antinodes[map2D.Coord{x, y}] {
+				fmt.Printf("\033[32m#")
+			} else if antinodes[map2D.Coord{x, y}] {
+				fmt.Printf("\033[32m%s", string(antennaMap[y][x]))
+			} else {
+				fmt.Printf("\033[0m%s", string(antennaMap[y][x]))
+			}
+		}
+		fmt.Print("\n")
+	}
 }

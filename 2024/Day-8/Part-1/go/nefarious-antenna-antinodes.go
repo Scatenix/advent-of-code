@@ -19,7 +19,6 @@ func main() {
 	puzzleFile := aocutil.AocSetup(DayPart)
 
 	puzzleLineHandler := func(line string, col [][]rune) [][]rune {
-		//col = append(col, strings.Split(line, ""))
 		col = append(col, []rune(line))
 		return col
 	}
@@ -33,21 +32,6 @@ func main() {
 	printAntennaMap(antennaMap, antinodes)
 
 	fmt.Printf(SolutionFormat, len(antinodes))
-}
-
-func printAntennaMap(antennaMap [][]rune, antinodes map[map2D.Coord]bool) {
-	for y := 0; y < len(antennaMap); y++ {
-		for x := 0; x < len(antennaMap[0]); x++ {
-			if antennaMap[y][x] == '.' && antinodes[map2D.Coord{x, y}] {
-				fmt.Printf("\033[32m#")
-			} else if antinodes[map2D.Coord{x, y}] {
-				fmt.Printf("\033[32m%s", string(antennaMap[y][x]))
-			} else {
-				fmt.Printf("\033[0m%s", string(antennaMap[y][x]))
-			}
-		}
-		fmt.Print("\n")
-	}
 }
 
 func getAllFrequencieMap(antennaMap [][]rune) map[rune][]map2D.Coord {
@@ -86,9 +70,17 @@ func calculateAntinodesCount(antennaMap [][]rune, freqMap map[rune][]map2D.Coord
 }
 
 
-
-
-
-
-
-
+func printAntennaMap(antennaMap [][]rune, antinodes map[map2D.Coord]bool) {
+	for y := 0; y < len(antennaMap); y++ {
+		for x := 0; x < len(antennaMap[0]); x++ {
+			if antennaMap[y][x] == '.' && antinodes[map2D.Coord{x, y}] {
+				fmt.Printf("\033[32m#")
+			} else if antinodes[map2D.Coord{x, y}] {
+				fmt.Printf("\033[32m%s", string(antennaMap[y][x]))
+			} else {
+				fmt.Printf("\033[0m%s", string(antennaMap[y][x]))
+			}
+		}
+		fmt.Print("\n")
+	}
+}
