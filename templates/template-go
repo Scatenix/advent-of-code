@@ -2,12 +2,13 @@ package main
 
 import (
 	aocio "advent-of-code/aocutil/go/aoc/io"
-	aocutil "advent-of-code/aocutil/go/aoc/util"
 	aocperf "advent-of-code/aocutil/go/aoc/perf"
+	aocutil "advent-of-code/aocutil/go/aoc/util"
 	"fmt"
 	"strconv"
 	"time"
 )
+
 
 const DayPart = "<<<YEAR>>> Day <<<DAY>>> - Part <<<PART>>>"
 const SolutionFormat = ">>> The solution is: %d\n"
@@ -26,7 +27,7 @@ func main() {
 	puzzleInput, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
-	solution := 0;
+	solution := 0
 	for _, v := range puzzleInput {
 		num, err := strconv.Atoi(string(v))
 		aocutil.Check(err)
