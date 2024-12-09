@@ -2,6 +2,13 @@ package slice
 
 import "strconv"
 
+func ReplaceRange[T any](s []T, i int, v []T) []T{
+	for x := 0; x < len(v); x++ {
+		s[i+x] = v[x]
+	}
+	return s
+}
+
 func Atoi(input []string) []int {
 	ints := make([]int, len(input));
 	for i, s := range input {
