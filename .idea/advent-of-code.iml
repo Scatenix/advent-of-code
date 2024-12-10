@@ -2,7 +2,21 @@
 <module type="WEB_MODULE" version="4">
   <component name="Go" enabled="true" />
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/2015/Day-1/Part-1/day1-part1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/2015/Day-1/Part-1/rust-2015-1-1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/2015/Day-1/Part-1/rust/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/2015/Day-1/Part-1/rust2016-1-1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/2015/Day-1/Part-2/rust-2016-1-2/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/2017/Day-1/Part-1/rust-2017-1-1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/2018/Day-1/Part-1/rust-2018-1-1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/aocutil/rust/aoc/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/aocutil/rust/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rust-test/my-test/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/2015/Day-1/Part-1/rust/target" />
+      <excludeFolder url="file://$MODULE_DIR$/rust-test/my-test/target" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
