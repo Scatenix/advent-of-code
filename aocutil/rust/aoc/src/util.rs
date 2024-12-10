@@ -3,7 +3,6 @@ use std::fs::File;
 
 pub fn aoc_setup(day_part: &str, fallback_puzzle_path: &str) -> File {
     let mut args: Vec<String> = env::args().collect();
-    println!("{:?}", env::current_dir());
     if args.len() < 2 {
         args.push(fallback_puzzle_path.to_owned());
     }
