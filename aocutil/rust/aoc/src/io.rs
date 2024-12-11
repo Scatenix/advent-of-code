@@ -18,23 +18,23 @@ use std::io::{BufRead, BufReader};
 /// ## Examples for reading_handler
 ///
 /// ```
-///     let reading_hanlder = |line: String, mut col: String| -> String {
+///     let reading_handler = |line: String, mut col: String| -> String {
 ///         col.push_str(&line);
 ///         col.push('\n');
 ///         return col
 ///     };
 ///
-///     let reading_hanlder = |line: String, mut col: Vec<String>| -> Vec<String> {
+///     let reading_handler = |line: String, mut col: Vec<String>| -> Vec<String> {
 ///         col.push(line.split(' ').collect());
 ///         return col
 ///     };
 ///
-///     let reading_hanlder = |line: String, mut col: Vec<String>| -> Vec<String> {
+///     let reading_handler = |line: String, mut col: Vec<String>| -> Vec<String> {
 ///         col.push(line.chars().collect());
 ///         return col
 ///     };
 ///
-///     let reading_hanlder = |line: String, mut col: Vec<Vec<u32>>| -> Vec<Vec<u32>> {
+///     let reading_handler = |line: String, mut col: Vec<Vec<u32>>| -> Vec<Vec<u32>> {
 ///         let digits: Vec<u32> = line.chars()
 ///             .filter_map(|c| c.to_digit(10))
 ///             .collect();

@@ -11,13 +11,13 @@ const SOLUTION_FORMAT: &str = ">>> The solution is: ";
 fn main() {
     let file = aoc::util::aoc_setup(DAY_PART, FALLBACK_PUZZLE_INPUT_PATH);
 
-    let reading_hanlder = |line: String, mut col: String| -> String {
+    let reading_handler = |line: String, mut col: String| -> String {
         col.push_str(&line);
         col.push('\n');
         return col
     };
 
-    let puzzle_input = aoc::io::read_puzzle_file(file, reading_hanlder);
+    let puzzle_input = aoc::io::read_puzzle_file(file, reading_handler);
 
     println!("{SOLUTION_FORMAT}{}", puzzle_input.len());
 }

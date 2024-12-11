@@ -8,13 +8,18 @@ const SOLUTION_FORMAT: &str = ">>> The solution is: ";
 fn main() {
     let file = aoc::util::aoc_setup(DAY_PART, FALLBACK_PUZZLE_INPUT_PATH);
 
-    let reading_hanlder = |line: String, mut col: String| -> String {
-        col.push_str(&line);
-        col.push('\n');
-        return col
+    let reading_handler = |line: String, mut floor: isize| -> isize {
+        for ch in line.chars() {
+            if ch == '(' {
+                floor += 1;
+            } else {
+                floor -= 1;
+            }
+        }
+        return floor
     };
 
-    let puzzle_input = aoc::io::read_puzzle_file(file, reading_hanlder);
+    let puzzle_input = aoc::io::read_puzzle_file(file, reading_handler);
 
-    println!("{SOLUTION_FORMAT}{}", puzzle_input.len());
+    println!("{SOLUTION_FORMAT}{}", puzzle_input);
 }
