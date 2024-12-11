@@ -10,5 +10,5 @@ sed -i s/'<<<YEAR>>>'/"$2"/ ./main.rs
 sed -i s/'<<<DAY>>>'/"$3"/ ./main.rs
 sed -i s/'<<<PART>>>'/"$4"/ ./main.rs
 
-printf 'aoc = { path = "../../../../aocutil/rust/aoc" }' >> ../Cargo.toml
-printf 'scopeguard = "1.2.0"' >> ../Cargo.toml
+printf 'aoc = { path = "../../../../aocutil/rust/aoc" }\n' >> ../Cargo.toml
+printf 'scopeguard = "1.2.0"\n' >> ../Cargo.toml
