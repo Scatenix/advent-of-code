@@ -21,19 +21,45 @@ func main() {
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
 	puzzleFile := aocutil.AocSetup(DayPart)
 
-	puzzleLineHandler := func(line string, col *list.List) *list.List {
-		col = list.New()
-		for _, v := range aocslice.Atoi(strings.Split(line, " ")) {
-			col.PushBack(v)
-		}
+	puzzleLineHandler := func(line string, col []int) []int {
+		col = append(col, aocslice.Atoi(strings.Split(line, " "))...)
 		return col
 	}
 
 	puzzleInput, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
-	for i := 0; i < 25; i++ {
-		for e := puzzleInput.Front(); e != nil; e = e.Next() {
+	stones := 0
+
+	for _, v := range puzzleInput {
+		l := list.New()
+		l.PushFront(v)
+
+		blink(l, 40)
+		stones += l.Len()
+		fmt.Printf(SolutionFormat, stones)
+
+		s := linkedListToSlice(l)
+		print(s)
+		for x, v := range s {
+			l2 := list.New()
+			l2.PushFront(v)
+
+			blink(l2, 35)
+			stones += l2.Len() - 1
+			//fmt.Printf(SolutionFormat, stones)
+			println("At step of second part ", x, " of ", len(s))
+		}
+	}
+
+	//fmt.Printf(SolutionFormat, puzzleInput.Len())
+	fmt.Printf("--------------")
+	fmt.Printf(SolutionFormat, stones)
+}
+
+func blink(l *list.List, times int) {
+	for i := 0; i < times; i++ {
+		for e := l.Front(); e != nil; e = e.Next() {
 			strVal := strconv.Itoa(e.Value.(int))
 			if e.Value == 0 {
 				e.Value = 1
@@ -41,14 +67,20 @@ func main() {
 				firstHalf, _ := strconv.Atoi(strVal[0 : len(strVal)/2])
 				secondHalf, _ := strconv.Atoi(strVal[len(strVal)/2:])
 				e.Value = firstHalf
-				puzzleInput.InsertAfter(secondHalf, e)
+				l.InsertAfter(secondHalf, e)
 				e = e.Next()
 			} else {
 				e.Value = e.Value.(int) * 2024
 			}
 		}
-		println("blink ", i)
+		//println("finished ", i, " of ", times)
 	}
+}
 
-	fmt.Printf(SolutionFormat, puzzleInput.Len())
+func linkedListToSlice(ll *list.List) []int {
+	s := make([]int, 0)
+	for e := ll.Front(); e != nil; e = e.Next() {
+		s = append(s, e.Value.(int))
+	}
+	return s
 }
