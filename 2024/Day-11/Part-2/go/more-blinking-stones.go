@@ -5,7 +5,6 @@ import (
 	aocperf "advent-of-code/aocutil/go/aoc/perf"
 	aocslice "advent-of-code/aocutil/go/aoc/slice"
 	aocutil "advent-of-code/aocutil/go/aoc/util"
-	"container/list"
 	"fmt"
 	"strconv"
 	"strings"
@@ -14,6 +13,7 @@ import (
 
 const DayPart = "2024 Day 11 - Part 2"
 const SolutionFormat = ">>> The solution is: %d\n"
+const Blinks = 45
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
@@ -32,24 +32,7 @@ func main() {
 	stones := 0
 
 	for _, v := range puzzleInput {
-		l := list.New()
-		l.PushFront(v)
-
-		blink(l, 40)
-		stones += l.Len()
-		fmt.Printf(SolutionFormat, stones)
-
-		s := linkedListToSlice(l)
-		print(s)
-		for x, v := range s {
-			l2 := list.New()
-			l2.PushFront(v)
-
-			blink(l2, 35)
-			stones += l2.Len() - 1
-			//fmt.Printf(SolutionFormat, stones)
-			println("At step of second part ", x, " of ", len(s))
-		}
+		stones += blink(v, 0)
 	}
 
 	//fmt.Printf(SolutionFormat, puzzleInput.Len())
@@ -57,30 +40,19 @@ func main() {
 	fmt.Printf(SolutionFormat, stones)
 }
 
-func blink(l *list.List, times int) {
-	for i := 0; i < times; i++ {
-		for e := l.Front(); e != nil; e = e.Next() {
-			strVal := strconv.Itoa(e.Value.(int))
-			if e.Value == 0 {
-				e.Value = 1
-			} else if len(strVal)%2 == 0 {
-				firstHalf, _ := strconv.Atoi(strVal[0 : len(strVal)/2])
-				secondHalf, _ := strconv.Atoi(strVal[len(strVal)/2:])
-				e.Value = firstHalf
-				l.InsertAfter(secondHalf, e)
-				e = e.Next()
-			} else {
-				e.Value = e.Value.(int) * 2024
-			}
-		}
-		//println("finished ", i, " of ", times)
+func blink(val, blinked int) int {
+	if blinked == Blinks {
+		return 1
 	}
-}
-
-func linkedListToSlice(ll *list.List) []int {
-	s := make([]int, 0)
-	for e := ll.Front(); e != nil; e = e.Next() {
-		s = append(s, e.Value.(int))
+	strVal := strconv.Itoa(val)
+	if val == 0 {
+		return blink(1, blinked+1)
+	} else if len(strVal)%2 == 0 {
+		firstHalf, _ := strconv.Atoi(strVal[0 : len(strVal)/2])
+		secondHalf, _ := strconv.Atoi(strVal[len(strVal)/2:])
+		tmp := blink(firstHalf, blinked+1)
+		return blink(secondHalf, blinked+1) + tmp
+	} else {
+		return blink(val*2024, blinked+1)
 	}
-	return s
 }
