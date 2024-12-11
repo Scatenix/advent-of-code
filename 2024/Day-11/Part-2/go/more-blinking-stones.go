@@ -5,11 +5,10 @@ import (
 	aocperf "advent-of-code/aocutil/go/aoc/perf"
 	aocslice "advent-of-code/aocutil/go/aoc/slice"
 	aocutil "advent-of-code/aocutil/go/aoc/util"
+	"container/list"
 	"fmt"
-	"slices"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -22,54 +21,34 @@ func main() {
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
 	puzzleFile := aocutil.AocSetup(DayPart)
 
-	puzzleLineHandler := func(line string, col []int) []int {
-		col = append(col, aocslice.Atoi(strings.Split(line, " "))...)
+	puzzleLineHandler := func(line string, col *list.List) *list.List {
+		col = list.New()
+		for _, v := range aocslice.Atoi(strings.Split(line, " ")) {
+			col.PushBack(v)
+		}
 		return col
 	}
 
 	puzzleInput, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
-	ch := make(chan int)
+
 	for i := 0; i < 25; i++ {
-		fmt.Println("Current i: {}", i)
-
-		var wg sync.WaitGroup
-
-		if len(puzzleInput) >= 8 {
-			part := len(puzzleInput) / 8
-
-			for g := 0; g < 8; g++ {
-
-				wg.Add(1)
-
-				go calculatePuzzlePart(puzzleInput[part*g:part*g+part], &wg)
-
+		for e := puzzleInput.Front(); e != nil; e = e.Next() {
+			strVal := strconv.Itoa(e.Value.(int))
+			if e.Value == 0 {
+				e.Value = 1
+			} else if len(strVal)%2 == 0 {
+				firstHalf, _ := strconv.Atoi(strVal[0 : len(strVal)/2])
+				secondHalf, _ := strconv.Atoi(strVal[len(strVal)/2:])
+				e.Value = firstHalf
+				puzzleInput.InsertAfter(secondHalf, e)
+				e = e.Next()
+			} else {
+				e.Value = e.Value.(int) * 2024
 			}
-			wg.Wait()
 		}
-		//else {
-		//	calculatePuzzlePart(puzzleInput, 0, len(puzzleInput))
-		//}
+		println("blink ", i)
 	}
 
-	fmt.Printf(SolutionFormat, len(puzzleInput))
-}
-
-func calculatePuzzlePart(puzzleInput []int, wg *sync.WaitGroup, ch chan int) {
-	defer wg.Done()
-
-	for s := 0; s < len(puzzleInput); s++ {
-		strVal := strconv.Itoa(puzzleInput[s])
-		if puzzleInput[s] == 0 {
-			puzzleInput[s] = 1
-		} else if len(strVal)%2 == 0 {
-			firstHalf, _ := strconv.Atoi(strVal[0 : len(strVal)/2])
-			secondHalf, _ := strconv.Atoi(strVal[len(strVal)/2:])
-			puzzleInput[s] = firstHalf
-			puzzleInput = slices.Insert(puzzleInput, s+1, secondHalf)
-			s++
-		} else {
-			puzzleInput[s] = puzzleInput[s] * 2024
-		}
-	}
+	fmt.Printf(SolutionFormat, puzzleInput.Len())
 }
