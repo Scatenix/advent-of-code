@@ -13,6 +13,7 @@
       <sourceFolder url="file://$MODULE_DIR$/aocutil/rust/aoc/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/aocutil/rust/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rust-test/my-test/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/2015/Day-1/Part-2/rust-2015-1-2/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/2015/Day-1/Part-1/rust/target" />
       <excludeFolder url="file://$MODULE_DIR$/rust-test/my-test/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />

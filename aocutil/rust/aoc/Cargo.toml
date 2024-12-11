@@ -9,3 +9,5 @@ crate-type = ["lib"]
 
 [dev-dependencies]
 parameterized = "2.0.0"
+
+[dependencies]

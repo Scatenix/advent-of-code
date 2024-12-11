@@ -1,5 +1,8 @@
 use aoc;
 
+#[macro_use(defer)]
+extern crate scopeguard;
+
 /* Conclusion
 */
 
@@ -9,6 +12,7 @@ const SOLUTION_FORMAT: &str = ">>> The solution is: ";
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 fn main() {
+    defer!{aoc::perf::time_tracker(std::time::Instant::now(), "main")}
     let file = aoc::util::aoc_setup(DAY_PART, FALLBACK_PUZZLE_INPUT_PATH);
 
     let reading_handler = |line: String, mut col: String| -> String {
