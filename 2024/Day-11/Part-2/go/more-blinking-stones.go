@@ -15,6 +15,20 @@ const DayPart = "2024 Day 11 - Part 2"
 const SolutionFormat = ">>> The solution is: %d\n"
 const Blinks = 75
 
+/* Conclusion
+2024 Day 11 - Part 2
+You can see the evolution of my attempt to get a good runtime for 75 blinks
+1. Started with what is still on part 1. A slice which gets expanded til the end. VERY high memory consumption
+2. Tried to get results faster using multithreading. Horrible code. Still VERY high mem consumption. And not even fast
+3. Replaced slice with linked list. Better performance but the same mem consumption
+4. Splitting tasks up for better mem consumption. Basically create smaller sub-lists for the GC to collect old ones
+5. Changing to a recursive function. Naturally good mem consumption and even faster than the linked list approach
+6. Current: Introducing memoization to compute every number only once and remember the stone count per number. Superfast, very good mem consumption
+
+Takeaway: 1. If recursion is possible, it might very well be the fastest way, as there is no overhead for handling the datastructures
+          2. memoization is king when doing the exact same calculation multiple times
+*/
+
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
 	defer aocperf.TimeTracker(time.Now(), "Main")
@@ -38,7 +52,6 @@ func main() {
 	fmt.Printf(SolutionFormat, stones)
 }
 
-// TODO: add version without memoization to here, to be able to see how exactly it works!
 func blink(val, blinked int, memoizeMap map[[2]int]int) int {
 	if memoizeMap[[2]int{val, blinked}] != 0 {
 		return memoizeMap[[2]int{val, blinked}]

@@ -9,6 +9,13 @@ Each Day-# directory is a resource directory, containing the puzzle-file.
 Each Part-# directory contains a puzzle-text file containing
 the copied puzzle from the official site including my personal solution.
 
+## Conclusions and Takeaway
+
+Sometimes for problems I learned something valuable, I will write it down as comment
+in the file. They start with "/* Conclusion" and end with the comment "*/"
+Or "# Conclusion" and end with the last consecutive line starting with an "#"
+
+They can be compibled to a more exhaustive list of conclusions and takeaways
 
 ## Used Technologies
 

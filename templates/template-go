@@ -9,6 +9,9 @@ import (
 	"time"
 )
 
+/* Conclusion
+*/
+
 const DayPart = "<<<YEAR>>> Day <<<DAY>>> - Part <<<PART>>>"
 const SolutionFormat = ">>> The solution is: %d\n"
 

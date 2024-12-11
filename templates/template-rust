@@ -1,5 +1,8 @@
 use aoc;
 
+/* Conclusion
+*/
+
 const FALLBACK_PUZZLE_INPUT_PATH: &str = "<<<YEAR>>>/Day-<<<DAY>>>/resources/puzzle-input";
 const DAY_PART: &str = "<<<YEAR>>> Day <<<DAY>>> - Part <<<PART>>>";
 const SOLUTION_FORMAT: &str = ">>> The solution is: ";
