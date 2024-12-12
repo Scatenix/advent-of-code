@@ -9,6 +9,18 @@ Each Day-# directory is a resource directory, containing the puzzle-file.
 Each Part-# directory contains a puzzle-text file containing
 the copied puzzle from the official site including my personal solution.
 
+## Puzzles I sucked at
+
+### Repeat in the future and see if I can solve it then
+
+- 2024 Day 6 Part 2: I was just not able to finish it (Recursive Pathfinding problem)
+- 2024 Day 10 Part 1&2: Topographic map. Had no Idea how to do this (Recursive Pathfinding problem)
+
+### Very hard imho, but finished. Sometimes with a few hints
+
+- 2024 Day 11 Part 2: Performance optimization needed, using memoization
+- 2024 Day 12 Part 1 and especially 2: Getting area, perimeter and number of sides for random shapes in 2D array
+
 ## Conclusions and Takeaway
 
 Sometimes for problems I learned something valuable, I will write it down as comment
