@@ -53,7 +53,6 @@ func getAreaData(puzzleInput [][]rune, symbol rune, coord map2D.Coord, visitedLo
 		perimeter := 0
 		for _, dir := range directions {
 			checkPlot := map2D.AddVector(map2D.Coord{coord.X, coord.Y}, dir)
-			//a, p := getAreaData(puzzleInput, symbol, checkPlot, visitedGlobally, area, perimeter)
 			a, p := getAreaData(puzzleInput, symbol, checkPlot, visitedLocally, visitedGlobally)
 			area += a
 			perimeter += p
