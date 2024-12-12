@@ -10,10 +10,18 @@ import (
 )
 
 /* Conclusion
- */
+- Recursion on steroids... I don't even know how I managed to do this only with slight hints.
+
+Takeaway:
+- recursion with a returned tupel is insanely head-breaking
+- Counting corners if you need sides of a shape/region in an array is easier than actually trying to find the sides
+- Taking shortcuts in the form of global variables is... well... also a solution :D
+*/
 
 const DayPart = "2024 Day 12 - Part 2"
 const SolutionFormat = ">>> The solution is: %d\n"
+
+var Perimeter = 0
 
 var directions = []map2D.Coord{
 	{1, 0},
@@ -43,53 +51,45 @@ func main() {
 }
 
 // getAreadData returns (area, perimeter)
-func getAreaData(puzzleInput [][]rune, symbol rune, coord, vec map2D.Coord, visitedLocally, visitedGlobally map[map2D.Coord]bool) (int, int) {
+func getAreaData(puzzleInput [][]rune, symbol rune, coord map2D.Coord, visitedLocally, visitedGlobally map[map2D.Coord]bool) (int, int) {
 	if visitedLocally[coord] == true {
 		return 0, 0
 	} else {
 		if map2D.OutOfBounds(puzzleInput, coord) || puzzleInput[coord.Y][coord.X] != symbol {
-			// already searched for perimeter on this axis?
-			alreadySearched := false
-			sides := 0
-			if vec.X == 0 {
-				// searching on X
-				for i := 0; i < len(puzzleInput); i++ {
-					if map2D.WithinBounds(puzzleInput, map2D.Coord{i, coord.Y}) && puzzleInput[coord.Y][i] == symbol {
-						sides++
-					}
-					if visitedLocally[map2D.Coord{i, coord.Y}] {
-						alreadySearched = true
-					}
-				}
-			} else {
-				// searching on Y
-				for i := 0; i < len(puzzleInput[0]); i++ {
-					if map2D.WithinBounds(puzzleInput, map2D.Coord{coord.X, i}) && puzzleInput[i][coord.X] == symbol {
-						sides++
-					}
-					if visitedLocally[map2D.Coord{coord.X, i}] {
-						alreadySearched = true
-					}
-				}
-			}
-
-			if alreadySearched {
-				return 0, 0
-			}
-			visitedLocally[coord] = true
-			return 0, sides + 1
+			return 0, 1
 		}
 		visitedGlobally[coord] = true
 		visitedLocally[coord] = true
 		area := 1
-		perimeter := 0
 		for _, dir := range directions {
 			checkPlot := map2D.AddVector(map2D.Coord{coord.X, coord.Y}, dir)
-			a, p := getAreaData(puzzleInput, symbol, checkPlot, dir, visitedLocally, visitedGlobally)
+			a, _ := getAreaData(puzzleInput, symbol, checkPlot, visitedLocally, visitedGlobally)
 			area += a
-			perimeter += p
+
+			findCorners(puzzleInput, symbol, coord, dir)
 		}
-		return area, perimeter
+		return area, 0
+	}
+}
+
+func findCorners(puzzleInput [][]rune, symbol rune, coord map2D.Coord, dir map2D.Coord) {
+	pos1 := map2D.AddVector(coord, dir)
+	pos3 := map2D.AddVector(pos1, nextDir(dir))
+	pos2 := map2D.AddVector(coord, nextDir(dir))
+	s1 := '.'
+	s2 := '.'
+	s3 := '.'
+	if map2D.WithinBounds(puzzleInput, pos1) {
+		s1 = puzzleInput[pos1.Y][pos1.X]
+	}
+	if map2D.WithinBounds(puzzleInput, pos2) {
+		s2 = puzzleInput[pos2.Y][pos2.X]
+	}
+	if map2D.WithinBounds(puzzleInput, pos3) {
+		s3 = puzzleInput[pos3.Y][pos3.X]
+	}
+	if (s1 == symbol && s2 == symbol && s3 != symbol) || (s1 != symbol && s2 != symbol) {
+		Perimeter++
 	}
 }
 
@@ -104,9 +104,10 @@ func getFenceNumbers(puzzleInput [][]rune) (map[int]int, map[int]int) {
 				continue
 			}
 
-			a, p := getAreaData(puzzleInput, plot, map2D.Coord{x, y}, directions[0], make(map[map2D.Coord]bool), visited)
+			a, _ := getAreaData(puzzleInput, plot, map2D.Coord{x, y}, make(map[map2D.Coord]bool), visited)
 			fenceArea[id] = a
-			fencePerimeter[id] = p
+			fencePerimeter[id] = Perimeter
+			Perimeter = 0
 			id++
 		}
 	}
@@ -119,4 +120,19 @@ func calculateTotalFenceCost(fenceArea, fencePerimeter map[int]int) int {
 		totalCost += fenceArea[p] * fencePerimeter[p]
 	}
 	return totalCost
+}
+
+func nextDir(dir map2D.Coord) map2D.Coord {
+	tmpVecX := dir.X
+	if dir.X != 0 {
+		dir.X = 0
+	} else {
+		dir.X = -dir.Y
+	}
+	if dir.Y != 0 {
+		dir.Y = 0
+	} else {
+		dir.Y = tmpVecX
+	}
+	return dir
 }
