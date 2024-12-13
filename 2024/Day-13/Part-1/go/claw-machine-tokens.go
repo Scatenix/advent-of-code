@@ -49,6 +49,7 @@ func main() {
 		BxMap := make(map[int]int)
 		ByMap := make(map[int]int)
 
+		// incrementing maxBxPresses by 1, because I start from 1, is important here! This broke my solution!
 		for i := 1; i < maxBxPresses+1; i++ {
 			BxMap[machine.Bx*i] = i
 		}
