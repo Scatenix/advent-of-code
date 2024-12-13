@@ -40,11 +40,6 @@ func main() {
 	aocutil.Check(err)
 
 	machines := inputToMachines(puzzleInput)
-	print(machines)
-
-	// maxBTable = prize / button-B values
-	// for i(0) < maxBTable -> map[B*i] = true
-	// map[prize - button-A*i values] == true &Always APresses++ -> found a winner combination (APresses*3 + (prize - button-A*i) / button-B)
 
 	tokens := 0
 	for _, machine := range machines {
@@ -54,24 +49,23 @@ func main() {
 		BxMap := make(map[int]int)
 		ByMap := make(map[int]int)
 
-		for i := 1; i < maxBxPresses; i++ {
+		for i := 1; i < maxBxPresses+1; i++ {
 			BxMap[machine.Bx*i] = i
 		}
-		for i := 1; i < maxByPresses; i++ {
+		for i := 1; i < maxByPresses+1; i++ {
 			ByMap[machine.By*i] = i
 		}
 
 		xPrize := machine.PrizeX
 		yPrize := machine.PrizeY
 		aCount := 0
-		for xPrize > 0 || yPrize > 0 {
-			//if BxMap[xPrize] > 0 && ByMap[xPrize] > 0 {
+		for xPrize >= 0 || yPrize >= 0 {
+			//if BxMap[xPrize] > 0 && BxMap[xPrize] == ByMap[yPrize] && aCount+BxMap[xPrize] <= 100 {
 			if BxMap[xPrize] > 0 && BxMap[xPrize] == ByMap[yPrize] {
 				tokens += aCount*3 + BxMap[xPrize]
+			} else if xPrize == 0 && yPrize == 0 {
+				tokens += aCount * 3
 			}
-			//else if xPrize < 0 {
-			//	break
-			//}
 			xPrize -= machine.Ax
 			yPrize -= machine.Ay
 			aCount++
