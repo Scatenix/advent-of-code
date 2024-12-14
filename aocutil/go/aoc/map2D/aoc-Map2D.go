@@ -88,10 +88,14 @@ func SubVector(pos, vec Coord) Coord {
 	return Coord{pos.X - vec.X, pos.Y - vec.Y}
 }
 
-func PrintMap[T any](m [][]T) {
+func PrintMap[T any](m [][]T, ANSI bool) {
 	for y := 0; y < len(m); y++ {
 		for x := 0; x < len(m[0]); x++ {
-			fmt.Print("\033[0m%s", m[y][x])
+			if ANSI {
+				fmt.Printf("\033[0m%s", m[y][x])
+			} else {
+				fmt.Printf("%s", m[y][x])
+			}
 		}
 		fmt.Print("\n")
 	}
