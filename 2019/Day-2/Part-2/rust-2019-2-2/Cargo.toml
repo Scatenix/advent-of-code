@@ -1,0 +1,8 @@
+[package]
+name = "rust-2019-2-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aoc = { path = "../../../../aocutil/rust/aoc" }
+scopeguard = "1.2.0"

@@ -11,22 +11,15 @@ const SOLUTION_FORMAT: &str = ">>> The solution is: ";
 fn main() {
     defer!{aoc::perf::time_tracker(std::time::Instant::now(), "main")}
     let file = aoc::util::aoc_setup(DAY_PART, FALLBACK_PUZZLE_INPUT_PATH);
+    let mut prog_stack = aoc::intcode::prog_stack_reader(file);
 
-    let reading_handler = |line: String, mut col: Vec<isize>| -> Vec<isize> {
-        col.extend(line.split(',')
-            .map(|s| s.parse::<isize>().unwrap()));
-        return col
-    };
+    prog_stack[1] = 12;
+    prog_stack[2] = 2;
 
-    let mut puzzle_input = aoc::io::read_puzzle_file(file, reading_handler);
-
-    puzzle_input[1] = 12;
-    puzzle_input[2] = 2;
-
-    let mut addr = 0;
-    while addr != -1 {
-        addr = aoc::intcode::intcode_interpreter(&mut puzzle_input, addr as usize);
+    let mut inst_pointer = 0;
+    while inst_pointer != -1 {
+        inst_pointer = aoc::intcode::intcode_interpreter(&mut prog_stack, inst_pointer as usize);
     }
 
-    println!("{SOLUTION_FORMAT}{}", puzzle_input[0]);
+    println!("{SOLUTION_FORMAT}{}", prog_stack[0]);
 }
