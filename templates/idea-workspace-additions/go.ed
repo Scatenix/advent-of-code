@@ -1,0 +1,25 @@
+H
+/keyToString/
++1
+a
+    "Go Build.GO <<<YEAR>>> Day-<<<DAY>>> Part-<<<PART>>>.executor": "Run",
+.
+?</configuration>?
+/<\/list>/
+i
+      <item itemvalue="Go Build.GO <<<YEAR>>> Day-<<<DAY>>> Part-<<<PART>>>" />
+.
+?</configuration>?
+a
+    <configuration name="GO <<<YEAR>>> Day-<<<DAY>>> Part-<<<PART>>>" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="advent-of-code" />
+      <working_directory value="$PROJECT_DIR$/<<<YEAR>>>/Day-<<<DAY>>>/" />
+      <parameters value="resources/puzzle-input" />
+      <kind value="PACKAGE" />
+      <package value="advent-of-code/<<<YEAR>>>/Day-<<<DAY>>>/Part-<<<PART>>>/go" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/<<<YEAR>>>/Day-<<<DAY>>>/Part-<<<PART>>>/go/puzzle.go" />
+      <method v="2" />
+    </configuration>
+.
+w
