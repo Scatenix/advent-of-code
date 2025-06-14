@@ -16,4 +16,3 @@ END {
 	}
 	print similarityScore
 }
-

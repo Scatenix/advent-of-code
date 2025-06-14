@@ -71,7 +71,7 @@ fi
 validateEnvironment() {
   if [ -z "$AOC_HOME" ]; then
     print "AOC_HOME not set. Please set AOC_HOME to the root directory of your advent-of-code project."
-    print "Inside AoC dir do 'export AOC_HOME=$(pwd)'"
+    print "Inside AoC dir do 'export AOC_HOME=$(pwd)' for bash or your shells equivalent command"
     print "Or put 'export AOC_HOME='<full path to AoC>'' into your shell rc file"
     exit 1
   fi
