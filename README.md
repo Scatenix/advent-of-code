@@ -14,7 +14,11 @@ Each Part-# directory contains a puzzle-text file containing the copied puzzle f
 
 Note: Both the puzzle input and the solution are **not** stored in this repo as we are told by the creator to not do that!
 
-## Used Technologies
+## Technologies
+
+- Languages: Go, Rust, AWK
+
+## Usage
 
 Make sure to use the `advent-of-code/createNewPuzzleTemplate.sh` script to create the file structure
 with everything at the right place.
