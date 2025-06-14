@@ -14,18 +14,6 @@ Each Part-# directory contains a puzzle-text file containing the copied puzzle f
 
 Note: Both the puzzle input and the solution are **not** stored in this repo as we are told by the creator to not do that!
 
-## Puzzles I had troubles with
-
-### Repeat in the future and see if I can solve it then
-
-- 2024 Day 6 Part 2: I was just not able to finish it (Recursive Pathfinding problem)
-- 2024 Day 10 Part 1&2: Topographic map. Did not know how to solve this (Recursive Pathfinding problem)
-
-### Very hard imho, but finished. Sometimes with a few hints
-
-- 2024 Day 11 Part 2: Performance optimization needed, using memoization
-- 2024 Day 12 Part 1 and especially 2: Getting area, perimeter and number of sides for random shapes in 2D array
-
 ## Used Technologies
 
 Make sure to use the `advent-of-code/createNewPuzzleTemplate.sh` script to create the file structure
