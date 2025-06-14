@@ -94,7 +94,7 @@ For help information use
 ---
 
 TECHNOLOGY: Currently `go`, `rust` or `awk`, or just anything that is in the recipe directory.
-            E.g. to add a java template, create a java.sh in there and you are set to use "java" as technology!
+            E.g. to add a java template, create a java.sh in there and you are set to use "java" as technology! (after creating necesarry scripts and resources of course)
             
 YEAR: Year of desired AoC puzzle. (e.g. 2024)
 
