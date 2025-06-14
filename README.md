@@ -17,6 +17,7 @@ Note: Both the puzzle input and the solution are **not** stored in this repo as 
 ## Technologies
 
 - Languages: Go, Rust, AWK
+- Tools for templating: Bash, sed, ed
 
 ## Usage
 
