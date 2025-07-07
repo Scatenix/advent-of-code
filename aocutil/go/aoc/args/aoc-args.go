@@ -11,7 +11,7 @@ func GetPuzzleFilePathFromArgs(dayPart string) string {
 	args := os.Args
 
 	if len(args) < 2 || len(args) > 2 {
-		fmt.Println("Please provide a path to the puzzle file of " + dayPart)
+		fmt.Println("Please provide a path as first argument to this go app to the puzzle input file of " + dayPart)
 		os.Exit(1)
 	}
 
