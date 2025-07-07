@@ -47,7 +47,7 @@ func main() {
 	puzzleInput, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
-	middleSum := 0;
+	middleSum := 0
 	for _, v := range puzzleInput.manuals {
 		if checkPageOrder(v, puzzleInput) {
 			middleSum += v[len(v)/2]
@@ -59,7 +59,7 @@ func main() {
 
 func checkPageOrder(v []int, puzzleInput manualInstructions) bool {
 	for _, page := range v {
-		pageOrder := puzzleInput.order[page];
+		pageOrder := puzzleInput.order[page]
 		for _, po := range pageOrder {
 			if slices.Contains(v, po) {
 				shouldBeBefore := slices.Index(v, page)

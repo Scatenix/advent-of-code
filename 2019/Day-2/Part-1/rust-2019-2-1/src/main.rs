@@ -18,7 +18,7 @@ fn main() {
 
     let mut inst_pointer = 0;
     while inst_pointer != -1 {
-        inst_pointer = aoc::intcode::intcode_interpreter(&mut prog_stack, inst_pointer as usize);
+        inst_pointer = aoc::intcode::intcode_interpreter_v1(&mut prog_stack, inst_pointer as usize);
     }
 
     println!("{SOLUTION_FORMAT}{}", prog_stack[0]);

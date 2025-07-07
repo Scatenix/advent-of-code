@@ -25,7 +25,7 @@ fn search_pair(prog_stack: Vec<isize>) -> (isize, isize) {
             stack_clone[2] = verb;
             let mut inst_pointer = 0;
             while inst_pointer != -1 {
-                inst_pointer = aoc::intcode::intcode_interpreter(&mut stack_clone, inst_pointer as usize);
+                inst_pointer = aoc::intcode::intcode_interpreter_v1(&mut stack_clone, inst_pointer as usize);
             }
             if stack_clone[0] == 19690720 {
                 return (noun, verb);

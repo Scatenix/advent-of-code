@@ -52,7 +52,18 @@ If no PUZZLE_FILE is supplied, a fallback to the automatically generated `path-t
 ### AWK
 
 All awk scripts should be executable on all unix systems.
-Run as normal AWK scripts would run `./<AWK_SCRIPT> <PUZZLE_FILE>`.
+Run as normal AWK scripts would run `./<AWK_SCRIPT> <PUZZLE_FILE>`
+
+### Languages I want to try in the future
+
+- R
+- Ocaml
+- Haskel
+- Zig
+
+## Testing
+
+not yet implemented
 
 ## Templates
 
