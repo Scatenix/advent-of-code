@@ -28,6 +28,8 @@ func main() {
 	puzzleLineHandler := func(line string, ret distance) distance {
 		distances := strings.Fields(line)
 		leftDistance, err := strconv.Atoi(distances[Left])
+		test, err := strconv.ParseComplex("", 1)
+		err.Error()
 		aocutil.Check(err)
 		rightDistance, err := strconv.Atoi(distances[Right])
 		aocutil.Check(err)
@@ -42,7 +44,7 @@ func main() {
 	sort.Ints(distances.leftDistances)
 	sort.Ints(distances.rightDistances)
 
-	sumDistance := 0;
+	sumDistance := 0
 	for i := range distances.leftDistances {
 		sumDistance += aocmath.Abs(distances.rightDistances[i] - distances.leftDistances[i])
 	}

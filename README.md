@@ -46,6 +46,12 @@ A lot of util functions, to get started with the puzzles faster, where created a
 All awk scripts are executable on unix
 Run as normal AWK scripts would run `./<AWK_SCRIPT> <PUZZLE_FILE>`
 
+### Languages I want to try in the future
+
+- R
+- Ocaml
+- Haskel
+- Zig
 
 ## Testing
 
