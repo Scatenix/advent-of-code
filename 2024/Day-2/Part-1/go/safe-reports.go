@@ -11,10 +11,11 @@ import (
 
 const DayPart = "Day 2 - Part 1"
 const SolutionFormat = "The count of the safe reports is: %d"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-2/resources/puzzle-input"
 
 // Usage: go-app <PATH_TO_PUZZLE_FILE>
 func main() {
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, ret [][]int) [][]int {
 		ret = append(ret, []int{})
@@ -32,11 +33,11 @@ func main() {
 	reports, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
-	safeReports := 0;
+	safeReports := 0
 	for _, v := range reports {
 		levelsIncreasing := v[0] < v[1]
 		for i := range v {
-			if i < len(v) - 1 {
+			if i < len(v)-1 {
 				if levelsIncreasing != (v[i] < v[i+1]) {
 					break
 				}

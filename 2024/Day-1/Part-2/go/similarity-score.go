@@ -10,18 +10,19 @@ import (
 
 const DayPart = "Day 1 - Part 2"
 const SolutionFormat = "The similarity score is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-4/resources/puzzle-input"
 
 const Left = 0
 const Right = 1
 
 type distance struct {
-	leftDistances []int
+	leftDistances  []int
 	rightDistances []int
 }
 
 // Usage: go-app <PATH_TO_PUZZLE_FILE>
 func main() {
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, ret distance) distance {
 		distances := strings.Fields(line)
@@ -37,15 +38,15 @@ func main() {
 	distances, err := aocio.ReadPuzzleFile(puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
-	similarityScore := 0;
+	similarityScore := 0
 	for _, vi := range distances.leftDistances {
-		count :=0
+		count := 0
 		for _, vj := range distances.rightDistances {
 			if vi == vj {
 				count++
 			}
 		}
-		similarityScore += vi * count;
+		similarityScore += vi * count
 	}
 
 	fmt.Printf(SolutionFormat, similarityScore)

@@ -11,12 +11,13 @@ import (
 
 const DayPart = "Day 4 - Part 2"
 const SolutionFormat = ">>> The cross-count of MASes is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-4/resources/puzzle-input"
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
 	defer aocperf.TimeTracker(time.Now(), "Main")
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col [][]string) [][]string {
 		xLine := strings.Split(line, "")
@@ -41,7 +42,9 @@ func main() {
 
 // searchXmasCrossFromA returns count of MAS Crosses found
 func searchXmasCrossFromA(wordPuzzle [][]string, x int, y int) int {
-	if !checkBorders(wordPuzzle, x, y) { return 0 }
+	if !checkBorders(wordPuzzle, x, y) {
+		return 0
+	}
 
 	mas1 := wordPuzzle[y+1][x-1] + wordPuzzle[y][x] + wordPuzzle[y-1][x+1]
 	mas2 := wordPuzzle[y+1][x+1] + wordPuzzle[y][x] + wordPuzzle[y-1][x-1]

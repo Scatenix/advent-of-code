@@ -21,6 +21,7 @@ Takeaway:
 
 const DayPart = "2024 Day 12 - Part 2"
 const SolutionFormat = ">>> The solution is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-12/resources/puzzle-input"
 
 var directions = map2D.GetDirectionalVectors()
 
@@ -28,7 +29,7 @@ var directions = map2D.GetDirectionalVectors()
 func main() {
 	defer aocperf.TimeTracker(time.Now(), "Main")
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col [][]rune) [][]rune {
 		col = append(col, []rune(line))

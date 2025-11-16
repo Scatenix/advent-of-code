@@ -9,10 +9,11 @@ import (
 
 const DayPart = "Day 4 - Part 1"
 const SolutionFormat = "The word-count of XMAS is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-4/resources/puzzle-input"
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, ret [][]string) [][]string {
 		xLine := strings.Split(line, "")
@@ -25,7 +26,7 @@ func main() {
 
 	fmt.Println(wordPuzzle)
 
-	solution := 0;
+	solution := 0
 	for y := range wordPuzzle {
 		for x := range wordPuzzle[y] {
 			if wordPuzzle[y][x] == "X" {
@@ -44,7 +45,9 @@ func searchXmasFromX(wordPuzzle [][]string, x int, y int) int {
 		xStep := directionalPendulum(direction, false)
 		yStep := directionalPendulum(direction, true)
 
-		if !checkBorders(wordPuzzle, x+xStep*3, y+yStep*3) { continue }
+		if !checkBorders(wordPuzzle, x+xStep*3, y+yStep*3) {
+			continue
+		}
 
 		if wordPuzzle[y+yStep][x+xStep] == "M" {
 			if wordPuzzle[y+yStep*2][x+xStep*2] == "A" {

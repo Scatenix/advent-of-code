@@ -14,11 +14,12 @@ import (
 
 const DayPart = "Day 5 - Part 1"
 const SolutionFormat = ">>> The solution is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-5/resources/puzzle-input"
 
 type manualInstructions struct {
-	order []int
+	order    []int
 	orderMap map[int]int
-	manuals [][]int
+	manuals  [][]int
 }
 
 /*
@@ -29,19 +30,21 @@ I think the ordered list of pages was correct (but very hard to say on the big d
 I guess the error is somewhere in the last for loop
 
 While maybe not more efficient, my first attempt was at least less code and did even work
- */
+*/
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
 	defer aocperf.TimeTracker(time.Now(), "Main")
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col manualInstructions) manualInstructions {
 		if strings.Contains(line, "|") {
 			instruction := strings.Split(line, "|")
-			intI1, err := strconv.Atoi(instruction[0]); aocutil.Check(err)
-			intI2, err := strconv.Atoi(instruction[1]); aocutil.Check(err)
+			intI1, err := strconv.Atoi(instruction[0])
+			aocutil.Check(err)
+			intI2, err := strconv.Atoi(instruction[1])
+			aocutil.Check(err)
 
 			if !slices.Contains(col.order, intI1) {
 				col.order = append(col.order, intI1)
@@ -71,7 +74,7 @@ func main() {
 		puzzleInput.orderMap[v] = i
 	}
 
-	middleSum := 0;
+	middleSum := 0
 	for _, v := range puzzleInput.manuals {
 		tmpSlice := make([]int, len(puzzleInput.orderMap))
 		for _, page := range v {

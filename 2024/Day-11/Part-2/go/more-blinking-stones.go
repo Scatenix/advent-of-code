@@ -13,6 +13,7 @@ import (
 
 const DayPart = "2024 Day 11 - Part 2"
 const SolutionFormat = ">>> The solution is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-11/resources/puzzle-input"
 const Blinks = 75
 
 /* Conclusion
@@ -33,7 +34,7 @@ Takeaway: 1. If recursion is possible, it might very well be the fastest way, as
 func main() {
 	defer aocperf.TimeTracker(time.Now(), "Main")
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col []int) []int {
 		col = append(col, aocslice.Atoi(strings.Split(line, " "))...)

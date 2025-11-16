@@ -14,12 +14,13 @@ import (
 
 const DayPart = "2024 Day 11 - Part 1"
 const SolutionFormat = ">>> The solution is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-11/resources/puzzle-input"
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
 	defer aocperf.TimeTracker(time.Now(), "Main")
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col []int) []int {
 		col = append(col, aocslice.Atoi(strings.Split(line, " "))...)

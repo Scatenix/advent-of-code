@@ -12,18 +12,19 @@ import (
 
 const DayPart = "Day 1 - Part 1"
 const SolutionFormat = "The sum of the distances is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-1/resources/puzzle-input"
 
 const Left = 0
 const Right = 1
 
 type distance struct {
-	leftDistances []int
+	leftDistances  []int
 	rightDistances []int
 }
 
 // Usage: go-app <PATH_TO_PUZZLE_FILE>
 func main() {
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, ret distance) distance {
 		distances := strings.Fields(line)

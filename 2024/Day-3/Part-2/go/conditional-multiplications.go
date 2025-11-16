@@ -10,10 +10,11 @@ import (
 
 const DayPart = "Day 3 - Part 2"
 const SolutionFormat = "The sum of all conditional multiplications is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-3/resources/puzzle-input"
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, ret string) string {
 		ret += line
@@ -23,7 +24,7 @@ func main() {
 	corruptMem, err := aocio.ReadPuzzleFile[string](puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
-	sumOfAllMultiplications := 0;
+	sumOfAllMultiplications := 0
 	rgxMulCommand := regexp.MustCompile(`(mul\(\d{1,3},\d{1,3}\)|don't()|do())`)
 	// the param n means how many matches should be made at max. -1 means infinite matches are allowed.
 	mulCommands := rgxMulCommand.FindAllString(corruptMem, -1)
@@ -33,11 +34,11 @@ func main() {
 	rgxDont := regexp.MustCompile(`don't()`)
 	mulEnabled := true
 	for _, mul := range mulCommands {
-		if (rgxDont.MatchString(mul)) {
+		if rgxDont.MatchString(mul) {
 			mulEnabled = false
-		} else if (rgxDo.MatchString(mul)) {
+		} else if rgxDo.MatchString(mul) {
 			mulEnabled = true
-		} else if (mulEnabled) {
+		} else if mulEnabled {
 			mulNumbers := rgxMulNumbers.FindAllString(mul, -1)
 			n1, err := strconv.Atoi(mulNumbers[0])
 			aocutil.Check(err)

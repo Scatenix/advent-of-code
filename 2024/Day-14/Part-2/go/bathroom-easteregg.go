@@ -22,6 +22,7 @@ The variable names got a bit out of hand in this one. But I am not to fond of th
 
 const DayPart = "2024 Day 14 - Part 2"
 const SolutionFormat = ">>> The solution is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-14/resources/puzzle-input"
 
 const XWidth = 101
 const YWidth = 103
@@ -35,7 +36,7 @@ type robot struct {
 func main() {
 	defer aocperf.TimeTracker(time.Now(), "Main")
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col []string) []string {
 		col = append(col, line)

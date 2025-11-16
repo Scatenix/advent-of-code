@@ -22,6 +22,7 @@ var VisualRun = 1
 
 const DayPart = "2024 Day 6 - Part 2"
 const SolutionFormat = ">>> The solution is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-6/resources/puzzle-input"
 
 const Guard = "^"
 const Wall = "#"
@@ -35,16 +36,16 @@ type coord struct {
 }
 
 type puzzleInput struct {
-	guardMap [][]string
+	guardMap   [][]string
 	guardStart coord
-	lineNum int
+	lineNum    int
 }
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
-    defer aocperf.TimeTracker(time.Now(), "Main")
-    defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	defer aocperf.TimeTracker(time.Now(), "Main")
+	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, puzzleInput puzzleInput) puzzleInput {
 		puzzleInput.lineNum++
@@ -60,7 +61,7 @@ func main() {
 
 	infinitumObstacle := 0
 	pos := puzzleInput.guardStart
-	walkVec := coord{x: 0, y:-1}
+	walkVec := coord{x: 0, y: -1}
 	dc := aocslice.DeepCopy2D(puzzleInput.guardMap)
 
 	printMap(puzzleInput.guardMap, pos)
@@ -129,19 +130,18 @@ func turnLeft(vec coord) coord {
 	return vec
 }
 
-
 func printMap(guardMap [][]string, pos coord) {
 	if visual {
 		VisualRun++
 		if VisualRun >= showFromRun {
 			cursor.HorizontalAbsolute(0)
 			cursor.UpAndClear(128)
-			for y := 0; y<len(guardMap); y++ {
-				for x := 0; x<len(guardMap[0]); x++ {
+			for y := 0; y < len(guardMap); y++ {
+				for x := 0; x < len(guardMap[0]); x++ {
 					if guardMap[y][x] == Obstacle {
 						fmt.Print("\033[41m", Obstacle)
 					} else {
-						fmt.Print("\033[0m",guardMap[y][x])
+						fmt.Print("\033[0m", guardMap[y][x])
 					}
 				}
 				fmt.Print("\n")
@@ -158,7 +158,7 @@ func printPassMarker(vec coord) {
 			time.Sleep(timeBetweenRenderInMicroSeconds * time.Microsecond)
 			cursor.Move(vec.x-1, -vec.y)
 			fmt.Print("\033[46m", PassMarker)
-			fmt.Print("\033[0m", )
+			fmt.Print("\033[0m")
 		}
 	}
 }

@@ -11,6 +11,7 @@ import (
 
 const DayPart = "2024 Day 6 - Part 1"
 const SolutionFormat = ">>> The solution is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-6/resources/puzzle-input"
 
 const Guard = "^"
 const PassMarker = "X"
@@ -23,9 +24,9 @@ type coord struct {
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
-    defer aocperf.TimeTracker(time.Now(), "Main")
-    defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	defer aocperf.TimeTracker(time.Now(), "Main")
+	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col [][]string) [][]string {
 		col = append(col, strings.Split(line, ""))
@@ -37,7 +38,7 @@ func main() {
 
 	pos := locateStart(guardMap)
 	// We start by walking down, because the map was read backwards
-	walkVec := coord{x: 0, y:-1}
+	walkVec := coord{x: 0, y: -1}
 
 	fmt.Println("Before walking:")
 	printMap(guardMap)
@@ -112,8 +113,8 @@ func turnLeft(vec coord) coord {
 
 func countWalkedPositions(guardMap [][]string) int {
 	passes := 0
-	for y := 0; y<len(guardMap); y++ {
-		for x := 0; x<len(guardMap[0]); x++ {
+	for y := 0; y < len(guardMap); y++ {
+		for x := 0; x < len(guardMap[0]); x++ {
 			if guardMap[y][x] == PassMarker {
 				passes++
 			}
@@ -123,8 +124,8 @@ func countWalkedPositions(guardMap [][]string) int {
 }
 
 func printMap(guardMap [][]string) {
-	for y := 0; y<len(guardMap); y++ {
-		for x := 0; x<len(guardMap[0]); x++ {
+	for y := 0; y < len(guardMap); y++ {
+		for x := 0; x < len(guardMap[0]); x++ {
 			fmt.Printf(guardMap[y][x])
 		}
 		fmt.Printf("\n")

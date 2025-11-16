@@ -20,6 +20,7 @@ define the playing field size
 
 const DayPart = "2024 Day 14 - Part 1"
 const SolutionFormat = ">>> The solution is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-14/resources/puzzle-input"
 
 const XWidth = 101
 const YWidth = 103
@@ -33,7 +34,7 @@ type robot struct {
 func main() {
 	defer aocperf.TimeTracker(time.Now(), "Main")
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col []string) []string {
 		col = append(col, line)

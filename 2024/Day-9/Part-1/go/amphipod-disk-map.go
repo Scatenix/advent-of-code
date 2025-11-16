@@ -13,15 +13,16 @@ import (
 
 const DayPart = "2024 Day 9 - Part 1"
 const SolutionFormat = ">>> The checksum for the compacted filesystem is : %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-9/resources/puzzle-input"
 const EmptySpace = -1
 
 var id = 0
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
-    defer aocperf.TimeTracker(time.Now(), "Main")
-    defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	defer aocperf.TimeTracker(time.Now(), "Main")
+	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col string) string {
 		return line
@@ -71,7 +72,7 @@ func shrinkDigits(digits []int) []int {
 func calcChecksum(digits []int) int {
 	sum := 0
 	for i, digit := range digits {
-		sum += i*digit
+		sum += i * digit
 	}
 	return sum
 }

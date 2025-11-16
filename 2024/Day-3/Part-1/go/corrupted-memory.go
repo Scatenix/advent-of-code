@@ -10,10 +10,11 @@ import (
 
 const DayPart = "Day 3 - Part 1"
 const SolutionFormat = "The sum of all multiplications is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-3/resources/puzzle-input"
 
 // Usage: go-app <PATH_TO_PUZZLE_FILE>
 func main() {
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, ret string) string {
 		ret += line
@@ -23,7 +24,7 @@ func main() {
 	corruptMem, err := aocio.ReadPuzzleFile[string](puzzleFile, puzzleLineHandler)
 	aocutil.Check(err)
 
-	sumOfAllMultiplications := 0;
+	sumOfAllMultiplications := 0
 	rgxMulCommand := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)`)
 	// the param n means how many matches should be made at max. -1 means infinite matches are allowed.
 	mulCommands := rgxMulCommand.FindAllString(corruptMem, -1)

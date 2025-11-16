@@ -10,9 +10,9 @@ import (
 	"time"
 )
 
-
 const DayPart = "2024 Day 9 - Part 2"
 const SolutionFormat = ">>> The checksum for the compacted filesystem is : %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-9/resources/puzzle-input"
 const EmptySpace = -1
 
 var id = 0
@@ -21,7 +21,7 @@ var id = 0
 func main() {
 	defer aocperf.TimeTracker(time.Now(), "Main")
 	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col string) string {
 		return line
@@ -56,17 +56,21 @@ func inputToDigits(input string) []int {
 }
 
 func shrinkDigitsDefragmented(digits []int) []int {
-	for i := len(digits)-1; i > -1; i-- {
+	for i := len(digits) - 1; i > -1; i-- {
 		if digits[i] != EmptySpace && i >= 1 {
 			digitCount := 1
 			for digits[i] == digits[i-1] {
 				digitCount++
 				i--
-				if i <= 1 { break }
+				if i <= 1 {
+					break
+				}
 			}
 			freeSpace := 0
 			for j := 0; j < len(digits); j++ {
-				if j >= i { break }
+				if j >= i {
+					break
+				}
 				if digits[j] == EmptySpace {
 					freeSpace++
 				} else {
@@ -92,7 +96,7 @@ func calcChecksum(digits []int) int {
 	sum := 0
 	for i, digit := range digits {
 		if digit != EmptySpace {
-			sum += i*digit
+			sum += i * digit
 		}
 	}
 	return sum

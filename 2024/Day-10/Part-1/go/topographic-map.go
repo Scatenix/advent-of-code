@@ -13,6 +13,7 @@ import (
 
 const DayPart = "2024 Day 10 - Part 1"
 const SolutionFormat = ">>> The sum of trailhead scores is: %d\n"
+const FallbackPuzzleInputPath = "/home/sca/Programming/advent-of-code/2024/Day-10/resources/puzzle-input"
 
 var StartVector = map2D.Coord{1, 0}
 var Score = 0
@@ -21,9 +22,9 @@ var PathId = 0
 
 // Usage: app <PATH_TO_PUZZLE_FILE>
 func main() {
-    defer aocperf.TimeTracker(time.Now(), "Main")
-    defer aocperf.PrintMemUsage(aocperf.KB, "Main")
-	puzzleFile := aocutil.AocSetup(DayPart)
+	defer aocperf.TimeTracker(time.Now(), "Main")
+	defer aocperf.PrintMemUsage(aocperf.KB, "Main")
+	puzzleFile := aocutil.AocSetup(DayPart, FallbackPuzzleInputPath)
 
 	puzzleLineHandler := func(line string, col [][]int) [][]int {
 		col = append(col, aocslice.Atoi(strings.Split(line, "")))

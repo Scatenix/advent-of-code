@@ -16,7 +16,7 @@ fn main() {
         col.push(line.parse::<isize>().unwrap());
         return col
     };
-
+w
     let module_masses = aoc::io::read_puzzle_file(file, reading_handler);
     let total_fuel: isize = module_masses.iter().map(|mass| mass / 3 - 2).sum();
     println!("{SOLUTION_FORMAT}{}", total_fuel);
