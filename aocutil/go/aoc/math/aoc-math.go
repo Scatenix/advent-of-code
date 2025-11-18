@@ -17,7 +17,7 @@ func Abs(i int) int {
 func Pow(a, b int) int {
 	result := a
 	for i := 0; i < b-1; i++ {
-		result = result*a
+		result = result * a
 	}
 	return result
 }
@@ -36,4 +36,27 @@ func IntToBaseStringWithPadding(num, length, base int) string {
 		binaryStr = fmt.Sprintf("%0*s", length, binaryStr)
 	}
 	return binaryStr
+}
+
+func GetSmallest(col []int) int {
+	if len(col) <= 0 {
+		return 0
+	} else if col == nil {
+		return 0
+	}
+
+	smallest := col[0]
+	for _, v := range col {
+		if v < smallest {
+			smallest = v
+		}
+	}
+	return smallest
+}
+
+func Greater(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }

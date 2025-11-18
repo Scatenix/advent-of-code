@@ -5,6 +5,7 @@ package map2D
 import (
 	"atomicgo.dev/cursor"
 	"fmt"
+	"reflect"
 	"time"
 )
 
@@ -89,12 +90,34 @@ func SubVector(pos, vec Coord) Coord {
 }
 
 func PrintMap[T any](m [][]T, ANSI bool) {
+	formatSymbol := "%s"
+	if reflect.TypeOf(m).String() == "[][]int" {
+		formatSymbol = "%d"
+	}
+
 	for y := 0; y < len(m); y++ {
 		for x := 0; x < len(m[0]); x++ {
 			if ANSI {
-				fmt.Printf("\033[0m%s", m[y][x])
+				fmt.Printf("\033[0m"+formatSymbol, m[y][x])
 			} else {
-				fmt.Printf("%s", m[y][x])
+				fmt.Printf(formatSymbol, m[y][x])
+			}
+		}
+		fmt.Print("\n")
+	}
+}
+
+func PrintCleanMap(m [][]int, ANSI bool) {
+	for y := 0; y < len(m); y++ {
+		for x := 0; x < len(m[0]); x++ {
+			if m[y][x] != 0 {
+				if ANSI {
+					fmt.Printf("\033[0m%d", m[y][x])
+				} else {
+					fmt.Printf("%d", m[y][x])
+				}
+			} else {
+				fmt.Printf(" ")
 			}
 		}
 		fmt.Print("\n")
