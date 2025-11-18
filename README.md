@@ -2,7 +2,7 @@
 
 **This is my Advent of Code repository!**
 
-Personal disclaimer: Old git commits prior to June 2025 for this project are gone, since I had puzzle inputs and solutions in my repo before making it public!
+Disclaimer: Old git commits prior to June 2025 for this project are gone, since I had puzzle inputs and solutions in my repo before making it public!
 
 ## Structure
 
