@@ -53,10 +53,3 @@ func GetSmallest(col []int) int {
 	}
 	return smallest
 }
-
-func Greater(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
