@@ -13,6 +13,7 @@ build-type:          Simple
 -- ========================
 library
     hs-source-dirs:
+        2025/Day-1/Part-1/haskell/puzzle/app,
         2025/Day-10/Part-1/haskell/puzzle/app,
         app,
         aocutil/haskell,

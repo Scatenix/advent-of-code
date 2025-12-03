@@ -1,9 +1,7 @@
-module Main where
-
 import AocUtils
 
 fallbackPath :: String
-fallbackPath = "../../../resources/puzzle-input"
+fallbackPath = "/home/sca/Programming/advent-of-code/2025/Day-1/resources/puzzle-input"
 
 solutionFormat :: String
 solutionFormat = ">>> The solution is: "
