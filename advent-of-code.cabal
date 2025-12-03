@@ -1,0 +1,32 @@
+cabal-version:       3.6
+
+-- ==================================================================================================================================
+-- This cabal file is just a little hack for the HLS to be able to work properly on these unusually structured haskell mini projects
+-- ==================================================================================================================================
+
+name:                advent-of-code
+version:             0.1.0.0
+build-type:          Simple
+
+-- ========================
+-- Library (for HLS)
+-- ========================
+library
+    hs-source-dirs:
+        2025/Day-10/Part-1/haskell/puzzle/app,
+        app,
+        aocutil/haskell,
+        2025/Day-3/Part-1/haskell/puzzle/app
+    exposed-modules: AocUtils
+    other-modules: Main
+    build-depends: base >=4.14 && <5
+    default-language: Haskell2010
+
+-- ========================
+-- Executable (optional)
+-- ========================
+executable puzzle
+    main-is: app/Main.hs
+    hs-source-dirs: .
+    build-depends: base >=4.14 && <5, advent-of-code
+    default-language: Haskell2010

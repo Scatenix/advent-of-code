@@ -1,0 +1,14 @@
+module Main where
+
+import AocUtils
+
+fallbackPath :: String
+fallbackPath = "<<<AOC_HOME>>>/<<<YEAR>>>/Day-<<<DAY>>>/resources/puzzle-input"
+
+solutionFormat :: String
+solutionFormat = ">>> The solution is: "
+
+main :: IO ()
+main = do
+  puzzleInput <- readPuzzleInput fallbackPath lines
+  putStrLn (solutionFormat ++ show puzzleInput)

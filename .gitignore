@@ -46,3 +46,4 @@ Cargo.lock
 # Haskell
 *.hi
 *.o
+dist-newstyle/
